@@ -1,9 +1,10 @@
+import { memberRead } from '@/lib/metabos/member-read';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { businessStore, BusinessError } from '@/lib/muzebos/store';
-import { businessAccess } from '@/lib/muzebos/http';
-import { perform, view } from '@/lib/muzebos/modules/engine';
-import { moduleById } from '@/lib/muzebos/modules';
+import { businessStore, BusinessError } from '@/lib/metabos/store';
+import { businessAccess } from '@/lib/metabos/http';
+import { perform, view } from '@/lib/metabos/modules/engine';
+import { moduleById } from '@/lib/metabos/modules';
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 function failure(error: unknown) {
@@ -13,17 +14,22 @@ function failure(error: unknown) {
   return NextResponse.json({ error: 'Module operation failed' }, { status: 500 });
 }
 /** Declarative workspace module records: list with computed fields, or create/update/transition. */
-export async function GET(req: Request, { params }: { params: { module: string } }) {
+export async function GET(req: Request, props: { params: Promise<{ module: string }> }) {
+  const params = await props.params;
   try {
-    businessAccess(req);
+    memberRead(req, 'finance.read');
     if (!moduleById(params.module)) throw new BusinessError('Unknown module', 404);
     return NextResponse.json(view(businessStore(), params.module), { headers: { 'Cache-Control': 'no-store' } });
   } catch (e) { return failure(e); }
 }
-export async function POST(req: Request, { params }: { params: { module: string } }) {
+export async function POST(req: Request, props: { params: Promise<{ module: string }> }) {
+  const params = await props.params;
   try {
     businessAccess(req);
-    if (!moduleById(params.module)) throw new BusinessError('Unknown module', 404);
+    const def = moduleById(params.module);
+    if (!def) throw new BusinessError('Unknown module', 404);
+    // Modules with a write permission need a signed-in member holding it (401 / 403).
+    if (def.writePermission) memberRead(req, def.writePermission);
     if (!req.headers.get('content-type')?.toLowerCase().startsWith('application/json')) throw new BusinessError('JSON content type required', 415);
     const text = await req.text();
     if (text.length > 64_000) throw new BusinessError('Request too large', 413);

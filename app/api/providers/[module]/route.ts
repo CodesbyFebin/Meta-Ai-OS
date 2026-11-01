@@ -1,8 +1,9 @@
+import { memberRead } from '@/lib/metabos/member-read';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { businessStore, BusinessError } from '@/lib/muzebos/store';
-import { businessAccess } from '@/lib/muzebos/http';
-import { providerConfig, setRef, testConnection } from '@/lib/muzebos/providers';
+import { businessStore, BusinessError } from '@/lib/metabos/store';
+import { businessAccess } from '@/lib/metabos/http';
+import { providerConfig, setRef, testConnection } from '@/lib/metabos/providers';
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 const Body = z.discriminatedUnion('action', [z.object({ action: z.literal('setRef'), field: z.string().max(64), ref: z.string().max(64) }), z.object({ action: z.literal('test') })]);
@@ -13,10 +14,12 @@ function failure(error: unknown) {
   return NextResponse.json({ error: 'Provider operation failed' }, { status: 500 });
 }
 /** Provider configuration: env-var references and whether each is set. Values are never returned. */
-export async function GET(req: Request, { params }: { params: { module: string } }) {
-  try { businessAccess(req); return NextResponse.json(providerConfig(businessStore(), params.module), { headers: { 'Cache-Control': 'no-store' } }); } catch (e) { return failure(e); }
+export async function GET(req: Request, props: { params: Promise<{ module: string }> }) {
+  const params = await props.params;
+  try { memberRead(req, 'finance.read'); return NextResponse.json(providerConfig(businessStore(), params.module), { headers: { 'Cache-Control': 'no-store' } }); } catch (e) { return failure(e); }
 }
-export async function POST(req: Request, { params }: { params: { module: string } }) {
+export async function POST(req: Request, props: { params: Promise<{ module: string }> }) {
+  const params = await props.params;
   try {
     businessAccess(req);
     if (!req.headers.get('content-type')?.toLowerCase().startsWith('application/json')) throw new BusinessError('JSON content type required', 415);

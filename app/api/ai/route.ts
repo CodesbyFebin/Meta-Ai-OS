@@ -1,13 +1,15 @@
+import { guardDraft } from '@/lib/metabos/ai/local-llm';
+import { memberRead } from '@/lib/metabos/member-read';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { businessStore, BusinessError } from '@/lib/muzebos/store';
-import { businessAccess } from '@/lib/muzebos/http';
-import { MUSE_FINDINGS, PRICES, SOURCES, TIERS, VERIFIED_AT, WEBLLM_VERSION } from '@/lib/muzebos/ai/models';
-import { serverProviders, type ChatMessage, type ProviderState } from '@/lib/muzebos/ai/providers';
-import { route, type Availability, type RouteDecision } from '@/lib/muzebos/ai/router';
-import { parseModelProposal, PROPOSAL_PROMPT, ruleProposal, sortTask } from '@/lib/muzebos/ai/swarm';
-import { propose, queue } from '@/lib/muzebos/ai/jev';
-import { AGENT_ROLES } from '@/lib/muzebos/workflows';
+import { businessStore, BusinessError } from '@/lib/metabos/store';
+import { businessAccess } from '@/lib/metabos/http';
+import { MUSE_FINDINGS, PRICES, SOURCES, TIERS, VERIFIED_AT, WEBLLM_VERSION } from '@/lib/metabos/ai/models';
+import { serverProviders, ProviderError, type ChatMessage, type ProviderState } from '@/lib/metabos/ai/providers';
+import { route, type Availability, type RouteDecision } from '@/lib/metabos/ai/router';
+import { parseModelProposal, PROPOSAL_PROMPT, ruleProposal, sortTask } from '@/lib/metabos/ai/swarm';
+import { propose, queue } from '@/lib/metabos/ai/jev';
+import { AGENT_ROLES } from '@/lib/metabos/workflows';
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 
@@ -36,14 +38,14 @@ async function callWithFallback(text: string, t: z.infer<typeof tier>, a: Availa
     if (errors.length) d.reasons.unshift(...errors);
     if (!d.chosen || d.chosen.provider === 'webllm') return { decision: d, result: null };
     try { return { decision: d, result: await providers[d.chosen.provider].chat(d.chosen.model, messages, AbortSignal.timeout(60_000)) }; }
-    catch (e) { errors.push(`${d.chosen.provider}/${d.chosen.model} failed (${e instanceof Error ? e.message.slice(0, 120) : 'error'}); trying the next candidate.`); a = { ...a, states: { ...a.states, [d.chosen.provider]: 'unconfigured' } }; }
+    catch (e) { errors.push(`${d.chosen.provider}/${d.chosen.model} failed (${e instanceof Error ? e.message.slice(0, 120) : 'error'}); trying the next candidate.`); a = { ...a, states: { ...a.states, [d.chosen.provider]: e instanceof ProviderError && e.code === 'billing_not_configured' ? 'billing_required' : 'unconfigured' } }; }
   }
   const d = route(text, t, { webgpu: false, states: {} }); d.reasons.unshift(...errors); return { decision: d, result: null };
 }
 
 export async function GET(req: Request) {
   try {
-    businessAccess(req);
+    memberRead(req, 'finance.read');
     return NextResponse.json({ verifiedAt: VERIFIED_AT, webllmVersion: WEBLLM_VERSION, sources: SOURCES, tiers: TIERS, prices: PRICES, providers: Object.values(serverProviders()).map((p) => p.status()), muse: MUSE_FINDINGS, queue: queue(businessStore()) }, { headers: { 'Cache-Control': 'no-store' } });
   } catch (e) { return failure(e); }
 }
@@ -63,7 +65,9 @@ export async function POST(req: Request) {
     if (c.action === 'proposeFromModel') {
       const p = parseModelProposal(c.raw, { taskId: c.taskId, role: c.role, model: c.model });
       if (!p.ok) { log('ai.proposal.refused', c.taskId, p.reason); return NextResponse.json({ error: p.reason }, { status: 422 }); }
-      return NextResponse.json(propose(store, p.proposal));
+      const guard = await guardDraft(store, JSON.stringify(p.proposal), { target: c.taskId });
+      if (guard.verdict === 'unsafe') return NextResponse.json({ error: `Blocked by Llama Guard: unsafe ${guard.categories.map((x) => `${x.code} ${x.name}`).join(', ')}`, guard }, { status: 422 });
+      return NextResponse.json({ ...propose(store, p.proposal), guard });
     }
     // swarm
     const prefix = `t${Date.now().toString(36)}-`;
@@ -80,9 +84,11 @@ export async function POST(req: Request) {
           if (parsed.ok) { proposal = parsed.proposal; note = 'Model proposal passed the schema.'; } else { note = parsed.reason; log('ai.proposal.refused', t.id, parsed.reason); }
         } else { proposal = ruleProposal(t); note = 'No server model available; rule-based draft (no model used).'; }
       }
-      let run = null; let error = null;
+      let run = null; let error = null; let guard = null;
+      if (proposal) guard = await guardDraft(store, JSON.stringify(proposal), { target: t.id });
+      if (proposal && guard?.verdict === 'unsafe') { error = `Blocked by Llama Guard: unsafe ${guard.categories.map((x) => `${x.code} ${x.name}`).join(', ')}`; proposal = null; }
       if (proposal) { try { run = propose(store, proposal); } catch (e) { error = e instanceof Error ? e.message : 'Refused'; } }
-      out.push({ ...t, decision, note, runId: run?.id ?? null, payloadHash: run?.payloadHash ?? null, error });
+      out.push({ ...t, decision, note, guard, runId: run?.id ?? null, payloadHash: run?.payloadHash ?? null, error });
     }
     log('ai.swarm', 'swarm', `${subtasks.length} subtasks: ${subtasks.map((t) => `${t.id}=${t.role}/${t.tier}`).join(', ')}`);
     return NextResponse.json({ subtasks: out });

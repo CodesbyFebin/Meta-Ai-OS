@@ -1,13 +1,15 @@
+import { memberRead } from '@/lib/metabos/member-read';
 import { NextResponse } from 'next/server';
-import { businessStore, BusinessError } from '@/lib/muzebos/store';
-import { businessAccess } from '@/lib/muzebos/http';
-import { infraReport } from '@/lib/muzebos/infra';
+import { businessStore, BusinessError } from '@/lib/metabos/store';
+import { businessAccess } from '@/lib/metabos/http';
+import { infraReport } from '@/lib/metabos/infra';
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 /** Live measurements for an infra page (process, DB, filesystem). Read-only. */
-export async function GET(req: Request, { params }: { params: { page: string } }) {
+export async function GET(req: Request, props: { params: Promise<{ page: string }> }) {
+  const params = await props.params;
   try {
-    businessAccess(req);
+    memberRead(req, 'finance.read');
     const r = infraReport(businessStore(), params.page);
     if (!r) throw new BusinessError('Unknown infra page', 404);
     return NextResponse.json(r, { headers: { 'Cache-Control': 'no-store' } });

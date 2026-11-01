@@ -1,15 +1,16 @@
+import { memberRead } from '@/lib/metabos/member-read';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { businessAccess } from '@/lib/muzebos/http';
-import { businessStore, BusinessError } from '@/lib/muzebos/store';
-import { getLayout, resetLayout, saveLayout } from '@/lib/muzebos/mission-layout';
+import { businessAccess } from '@/lib/metabos/http';
+import { businessStore, BusinessError } from '@/lib/metabos/store';
+import { getLayout, resetLayout, saveLayout } from '@/lib/metabos/mission-layout';
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 const Body = z.discriminatedUnion('action', [z.object({ action: z.literal('save'), widgets: z.array(z.string().max(32)).max(16) }), z.object({ action: z.literal('reset') })]);
 const fail = (e: unknown) => e instanceof BusinessError ? NextResponse.json({ error: e.message }, { status: e.status }) : e instanceof z.ZodError || e instanceof SyntaxError ? NextResponse.json({ error: 'Invalid request' }, { status: 400 }) : NextResponse.json({ error: 'Layout operation failed' }, { status: 500 });
 /** Saved Mission Control widget layout (order and visibility). */
 export async function GET(req: Request) {
-  try { businessAccess(req); return NextResponse.json(getLayout(businessStore()), { headers: { 'Cache-Control': 'no-store' } }); } catch (e) { return fail(e); }
+  try { memberRead(req); return NextResponse.json(getLayout(businessStore()), { headers: { 'Cache-Control': 'no-store' } }); } catch (e) { return fail(e); }
 }
 export async function POST(req: Request) {
   try {

@@ -1,3 +1,4 @@
+import { readJsonBounded } from '@/lib/bounded-body';
 import { NextResponse } from 'next/server';
 import { getDb } from '@/lib/data';
 import { launchSupersetDraft, supersetKey } from '@/lib/connectors/superset';
@@ -14,8 +15,9 @@ export const runtime = 'nodejs';
  * launch. Success moves it to running with the workspace id; a CLI failure
  * marks it failed with the CLI's own message, never a fake success.
  */
-export async function POST(req: Request, { params }: { params: { id: string } }) {
-  const body = await req.json().catch(() => null);
+export async function POST(req: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
+  const body = await readJsonBounded(req).catch(() => null);
   const refused = gateResponse('GLADOS_WRITES', body);
   if (refused) return refused;
 

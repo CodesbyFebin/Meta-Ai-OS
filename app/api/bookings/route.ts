@@ -1,10 +1,11 @@
+import { memberRead } from '@/lib/metabos/member-read';
 import { NextResponse } from 'next/server';
-import { businessAccess } from '@/lib/muzebos/http';
-import { businessStore, BusinessError } from '@/lib/muzebos/store';
+import { businessAccess } from '@/lib/metabos/http';
+import { businessStore, BusinessError } from '@/lib/metabos/store';
 export const dynamic = 'force-dynamic';
 export function GET(req: Request) {
   try {
-    businessAccess(req);
+    memberRead(req, 'deals.write');
     const store = businessStore();
     return NextResponse.json({ bookings: store.bookings(), customers: store.customers() }, { headers: { 'Cache-Control': 'no-store' } });
   } catch (error) {

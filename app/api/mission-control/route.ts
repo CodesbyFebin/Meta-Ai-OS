@@ -1,7 +1,8 @@
+import { memberRead } from '@/lib/metabos/member-read';
 import { NextResponse } from 'next/server';
-import { businessAccess } from '@/lib/muzebos/http';
-import { businessStore, BusinessError } from '@/lib/muzebos/store';
-import { missionSnapshot } from '@/lib/muzebos/mission';
+import { businessAccess } from '@/lib/metabos/http';
+import { businessStore, BusinessError } from '@/lib/metabos/store';
+import { missionSnapshot } from '@/lib/metabos/mission';
 import { getDb } from '@/lib/data';
 import { filmingMode } from '@/lib/paths';
 import { allConnectorStatuses } from '@/lib/connectors';
@@ -16,7 +17,7 @@ async function boundedConnections():Promise<ConnectorStatus[]> {
 function tzOffset(req:Request){const v=Number(new URL(req.url).searchParams.get('tz'));return Number.isInteger(v)&&Math.abs(v)<=840?v:0;}
 export async function GET(req:Request) {
  try {
-  businessAccess(req);
+  memberRead(req, 'finance.read');
   // The commerce store is real even if inherited preview mode is on. Never
   // mix fictional tasks/connectors into the real mission-control summary.
   const demo=filmingMode();

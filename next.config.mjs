@@ -2,9 +2,9 @@
 export const MUZEBOS_SHORT_PATHS = ['orders', 'money', 'talk', 'stock', 'growth', 'operations', 'builder', 'foundation', 'system', 'evidence', 'settings', 'upgrade', 'support', 'developer', 'account'];
 
 export const MUZEBOS_LEGACY_WORKSPACE = [
-  ['/workspace/customers', '/workspace/orders/crm-profiles'],
-  ['/workspace/inventory', '/workspace/stock/product-catalog-graph'],
-  ['/workspace/tasks', '/workspace/operations/tasks-and-goals'],
+  ['/workspace/customers', '/workspace/orders/customers'],
+  ['/workspace/inventory', '/workspace/stock/catalog'],
+  ['/workspace/tasks', '/workspace/operations/tasks'],
 ];
 
 /** @type {import('next').NextConfig} */
@@ -29,14 +29,14 @@ const nextConfig = {
       // FounderOS kept lead magnets under /content/lead-magnets; GladOS has no
       // /content page (archived 2026-09-17), so the old path 308s (SPEC O2).
       { source: '/content/lead-magnets', destination: '/lead-magnets', permanent: true },
-      // MuzeBOS short paths -> canonical registry routes (lib/muzebos/registry.ts;
-      // tests/muzebos-registry.test.ts keeps this list in sync). 307 so the
+      // MeTaBos short paths -> canonical registry routes (lib/metabos/registry.ts;
+      // tests/metabos-registry.test.ts keeps this list in sync). 307 so the
       // short paths stay free for later use.
       ...MUZEBOS_SHORT_PATHS.map((id) => ({ source: `/${id}`, destination: `/workspace/${id}`, permanent: false })),
       { source: '/help', destination: '/workspace/support', permanent: false },
       { source: '/api-docs', destination: '/workspace/developer', permanent: false },
       { source: '/billing', destination: '/workspace/upgrade', permanent: false },
-      // Old flat workspace paths -> their registry pages (tests/muzebos-registry.test.ts).
+      // Old flat workspace paths -> their registry pages (tests/metabos-registry.test.ts).
       ...MUZEBOS_LEGACY_WORKSPACE.map(([from, to]) => ({ source: from, destination: to, permanent: false })),
     ];
   },
@@ -54,12 +54,9 @@ const nextConfig = {
   },
   // This is the private business workspace. Public project docs are built separately in site/.
   async headers() { return [{ source: '/:path*', headers: [{ key: 'X-Robots-Tag', value: 'noindex, nofollow, noarchive' }] }]; },
-  experimental: {
-    outputFileTracingIncludes: { "/api/employee-library": ["./vendor/reference-documents/*.txt"] },
-    serverComponentsExternalPackages: ['better-sqlite3', 'node-ical', 'nodemailer'],
-    // instrumentation.ts: warms the live-read caches at boot (lib/warm.ts) and starts the cron tick when GLADOS_CRON=1 (SPEC O7).
-    instrumentationHook: true,
-  },
+  outputFileTracingIncludes: { "/api/employee-library": ["./vendor/reference-documents/*.txt"] },
+  serverExternalPackages: ['better-sqlite3', 'node-ical', 'nodemailer'],
+  // instrumentation.ts (on by default in Next 15): warms the live-read caches at boot (lib/warm.ts) and starts the cron tick when GLADOS_CRON=1 (SPEC O7).
 };
 
 export default nextConfig;
