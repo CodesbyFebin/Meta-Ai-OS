@@ -46,3 +46,11 @@ public/content-media/ad-engine/
 /data/
 
 .env.inference
+
+# meta-ai-os additions
+coverage/
+*.gguf
+*.safetensors
+*.sqlite
+.env.*
+!.env.example

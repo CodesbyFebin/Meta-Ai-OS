@@ -1,3 +1,15 @@
+# MuZe — Meta AI Business Operating Server (hackathon entry)
+
+> MuZe is the pitch name; the code and earlier docs below call the app **MeTaBos**.
+
+## About this repository's history (read first)
+- This repo was assembled on 2 Nov 2026 IST from the development repo [CodesbyFebin/MuzeBOS--The-Zero-Trust-Business-OS](https://github.com/CodesbyFebin/MuzeBOS--The-Zero-Trust-Business-OS) (top of the draft PR stack #50–#68, commit `f8cb52d`). Commit dates are the assembly time, not backdated.
+- Commit 1, `chore: import pre-existing code (pre-kickoff, Oct 26 2026)`, is the exact tree of development commit `1105e64` (26 Oct 2026, 7:35 PM IST). Kickoff was 26 Oct 2026, 9:30 PM IST (16:00 UTC). All 31 development commits up to `1105e64` are dated before kickoff; the first later commit is `2db8d32` (27 Oct 2026, 11:41 PM IST).
+- The following commits split every file changed between `1105e64` and `f8cb52d` by area (platform, Llama/swarm, Meta Server, Meta Suite, MUSE, Brain, safety, docs/tests). The final tree is byte-identical to `f8cb52d`, plus the pitch files.
+- Ambiguities: (1) cut-off uses git commit dates, which are self-reported; (2) a file that existed pre-kickoff and was changed during the event appears in its area commit with its final content, so the area commits mix event edits to pre-existing files with new files; `git diff <commit-1> HEAD -- <file>` shows exactly what changed during the event; (3) the area split is by path keywords, so a few files may sit in a neighbouring area; (4) intermediate commits were not individually built, only the final tree.
+
+---
+
 # MeTaBos — Cyber AI Business OS at the Meta Global AI Developer Hackathon (Oct 26 to Nov 4, 2026)
 
 **Theme:** Build for Your World. **Track:** Indie developer (solo).

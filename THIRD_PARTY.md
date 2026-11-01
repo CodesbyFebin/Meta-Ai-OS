@@ -59,3 +59,7 @@ None yet.
 - three@0.169.0 (pinned to match the owner-supplied source project), MIT License, Copyright © 2010-2026 three.js authors (github.com/mrdoob/three.js). Used via npm, including examples/jsm OrbitControls and GPUComputationRenderer (MIT). It is lazy-loaded on the voice page only.
 - The fur simulator code in lib/metabos/fur-sim is a clean-room implementation. The referenced fur-sim source was not found in either GitHub account (CodesbyFebin, Cyberteckmaster), and d.txt states no licence.
 - Preset data (the Sakura Mochi, Golden Fluff, Midnight Velvet and Matcha Puff base and tip colours and groom values, plus the environment light intensities and wind) is ported from the owner-supplied copy /workspace/designs/fur-src2/src/lib/fur-sim (ui-presets.js, environments.ts). No licence is stated in that copy. No shader or engine code was copied from it. The shading is "Marschner-style", following the published Marschner et al. 2003 model; no code was taken from it.
+
+## Pitch page and MUSE fur (MuZe repo)
+- `docs/index.html` and its 2D MUSE canvas, `docs/assets/*.svg` were written for this repo; no third-party code, no CDN.
+- Pending, not in this repo yet: the owner's own Google AI Studio fur engine ("3D GPU Fur Simulation", made or remixed by the owner, pre-existing, no licence file) is being ported in the development repo and will be labelled as pre-existing third-party/AI Studio code when added.
