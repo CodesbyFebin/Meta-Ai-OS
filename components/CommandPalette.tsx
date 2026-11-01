@@ -6,7 +6,7 @@ import { filterCommands, type Command } from '@/lib/palette';
 // Digit shortcuts (1–9) jump to views — derived from the sidebar's visible order
 // so they stay in lockstep with the nav.
 import { digitViewsFor } from '@/lib/nav';
-import { workspaceDigitViews } from '@/lib/muzebos/registry';
+import { workspaceDigitViews } from '@/lib/metabos/registry';
 import { BRAND } from '@/lib/brand';
 import { GEmpty, GList, GRow, GSearch, GTag } from '@/components/g';
 import type { UiStyle } from '@/lib/appearance';
@@ -45,7 +45,7 @@ export function CommandPalette({ commands, ui = 'classic', off = [] }: { command
         if (e.defaultPrevented) return;
         close();
       } else if (!open && /^[1-9]$/.test(e.key) && !e.metaKey && !e.ctrlKey && !e.altKey && !isTyping()) {
-        const href = (BRAND.id === 'muzebos' ? workspaceDigitViews() : digitViewsFor(off))[Number(e.key) - 1];
+        const href = (BRAND.id === 'metabos' ? workspaceDigitViews() : digitViewsFor(off))[Number(e.key) - 1];
         if (href) router.push(href);
       }
     }
@@ -148,6 +148,9 @@ export function CommandPalette({ commands, ui = 'classic', off = [] }: { command
     >
       <div
         className="c-pop w-[560px] max-w-[calc(100vw-48px)] overflow-hidden"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Command palette"
         onClick={(e) => e.stopPropagation()}
       >
         <input
@@ -168,6 +171,7 @@ export function CommandPalette({ commands, ui = 'classic', off = [] }: { command
               go(hits[index]);
             }
           }}
+          aria-label="Search views, agents and tools"
           placeholder="Jump anywhere — views, agents, tools…"
           className="w-full border-b border-os-border bg-transparent px-[18px] py-4 font-mono text-sm text-os-text outline-none placeholder:text-os-dim"
         />

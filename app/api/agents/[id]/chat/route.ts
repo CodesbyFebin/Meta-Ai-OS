@@ -1,3 +1,4 @@
+import { readJsonBounded } from '@/lib/bounded-body';
 import { NextResponse } from 'next/server';
 import { getDb } from '@/lib/data';
 import { realAgents } from '@/lib/agents/real';
@@ -7,11 +8,12 @@ import { routeConductorMessage } from '@/lib/agents/conductor';
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs'; // better-sqlite3 is native — keep off the edge runtime
 
-export async function POST(req: Request, { params }: { params: { id: string } }) {
+export async function POST(req: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   let message = '';
   let screenContext: string | undefined;
   try {
-    const body = (await req.json()) as { message?: unknown; context?: unknown };
+    const body = (await readJsonBounded(req)) as { message?: unknown; context?: unknown };
     message = typeof body.message === 'string' ? body.message.trim() : '';
     screenContext = typeof body.context === 'string' && body.context.trim() ? body.context.slice(0, 4000) : undefined;
   } catch {

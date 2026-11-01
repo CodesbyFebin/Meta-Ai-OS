@@ -21,7 +21,8 @@
  * `ui` comes from the root layout and then follows html[data-ui] live.
  */
 import Link from 'next/link';
-import { WorkspaceNavigation } from '@/components/muzebos/WorkspaceNavigation';
+import { OpeningIntro } from '@/components/metabos/OpeningIntro';
+import { WorkspaceNavigation } from '@/components/metabos/WorkspaceNavigation';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -399,7 +400,8 @@ export function Sidebar({ brand, ui = 'classic', off = [] }: { brand: BrandMark;
             </Link>
           </div>
         )}
-        {brand.name === 'MuzeBOS' ? <WorkspaceNavigation /> : <nav ref={navRef} className="os-nav" aria-label="Views">
+        {brand.name === 'MeTaBos' && <OpeningIntro />}
+        {brand.name === 'MeTaBos' ? <WorkspaceNavigation /> : <nav ref={navRef} className="os-nav" aria-label="Views">
           <div ref={listRef} className="os-nav-list">
             {visibleGroups(off).map((group) => (
               <div key={group.id} role="group" aria-label={group.label} className="os-nav-group">

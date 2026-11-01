@@ -1,3 +1,4 @@
+import { readJsonBounded } from '@/lib/bounded-body';
 import { NextResponse } from 'next/server';
 import { randomUUID } from 'node:crypto';
 import { z } from 'zod';
@@ -17,8 +18,9 @@ const Body = z.object({ model: z.string().trim().min(1).max(120) });
  * an agent defined in code (lib/agents/real.ts) has no stored model to move,
  * so it answers 409 and changes nothing rather than pretending.
  */
-export async function PATCH(req: Request, { params }: { params: { id: string } }) {
-  const body = await req.json().catch(() => null);
+export async function PATCH(req: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
+  const body = await readJsonBounded(req).catch(() => null);
   const parsed = Body.safeParse(body);
   if (!parsed.success) return NextResponse.json({ error: 'model is required' }, { status: 400 });
   const db = getDb();
