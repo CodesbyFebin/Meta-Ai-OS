@@ -1,9 +1,11 @@
+import { readJsonBounded } from '@/lib/bounded-body';
 import { NextResponse } from 'next/server';
 import { PipelineInputSchema, deletePipeline, getPipeline, updatePipeline, validatePipeline, type Pipeline } from '@/lib/content-pipelines';
 
 export const dynamic = 'force-dynamic';
 
-export async function GET(_request: Request, { params }: { params: { id: string } }) {
+export async function GET(_request: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const pipeline = getPipeline(params.id);
   if (!pipeline) return NextResponse.json({ error: `unknown pipeline: ${params.id}` }, { status: 404 });
   return NextResponse.json({ pipeline });
@@ -11,11 +13,12 @@ export async function GET(_request: Request, { params }: { params: { id: string 
 
 /** Replaces name/description/nodes/edges in place — id and createdAt carry
  *  over. Validated first, same as create. */
-export async function PUT(request: Request, { params }: { params: { id: string } }) {
+export async function PUT(request: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const existing = getPipeline(params.id);
   if (!existing) return NextResponse.json({ error: `unknown pipeline: ${params.id}` }, { status: 404 });
 
-  const parsed = PipelineInputSchema.safeParse(await request.json().catch(() => null));
+  const parsed = PipelineInputSchema.safeParse(await readJsonBounded(request).catch(() => null));
   if (!parsed.success) return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
 
   const draft: Pipeline = { ...existing, ...parsed.data };
@@ -26,7 +29,8 @@ export async function PUT(request: Request, { params }: { params: { id: string }
   return NextResponse.json({ pipeline });
 }
 
-export async function DELETE(_request: Request, { params }: { params: { id: string } }) {
+export async function DELETE(_request: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const removed = deletePipeline(params.id);
   if (!removed) return NextResponse.json({ error: `unknown pipeline: ${params.id}` }, { status: 404 });
   return NextResponse.json({ ok: true });

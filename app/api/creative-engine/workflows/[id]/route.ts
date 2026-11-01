@@ -1,3 +1,4 @@
+import { readJsonBounded } from '@/lib/bounded-body';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { WorkflowEdgeSchema, WorkflowNodeSchema } from '@/lib/creative-engine/schemas';
@@ -18,7 +19,8 @@ function withStatus(id: string) {
   return { workflow: w, status: Object.fromEntries(w.nodes.map((n) => [n.id, nodeStatus(w, n, st)])), problems: validateGraph(w), runs: runs.filter((r) => w.nodes.some((n) => n.runId === r.id)) };
 }
 
-export async function GET(_req: Request, { params }: { params: { id: string } }) {
+export async function GET(_req: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const r = withStatus(params.id);
   if (!r) return NextResponse.json({ ok: false, error: 'not found' }, { status: 404 });
   return NextResponse.json({ ok: true, ...r });
@@ -35,8 +37,8 @@ const Patch = z.object({
   name: z.string().min(1).max(80).optional(),
   layout: LayoutSchema.optional(),
   /** legacy body: runtime fields in it are ignored */
-  nodes: z.array(WorkflowNodeSchema).optional(),
-  edges: z.array(WorkflowEdgeSchema).optional(),
+  nodes: z.array(WorkflowNodeSchema).max(1000).optional(),
+  edges: z.array(WorkflowEdgeSchema).max(1000).optional(),
   baseUpdatedAt: z.string().optional(),
   force: z.boolean().optional(),
   reset: z.boolean().optional(),
@@ -44,8 +46,9 @@ const Patch = z.object({
   restoreRunSnapshot: z.boolean().optional(),
 });
 
-export async function PATCH(request: Request, { params }: { params: { id: string } }) {
-  const parsed = Patch.safeParse(await request.json().catch(() => null));
+export async function PATCH(request: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
+  const parsed = Patch.safeParse(await readJsonBounded(request).catch(() => null));
   if (!parsed.success) return NextResponse.json({ ok: false, error: parsed.error.message }, { status: 400 });
   const p = parsed.data;
   const current = readWorkflow(params.id);
@@ -67,7 +70,8 @@ export async function PATCH(request: Request, { params }: { params: { id: string
   return NextResponse.json({ ok: true, ...view });
 }
 
-export async function DELETE(_req: Request, { params }: { params: { id: string } }) {
+export async function DELETE(_req: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   if (!readWorkflow(params.id)) return NextResponse.json({ ok: true, alreadyGone: true });
   deleteWorkflow(params.id);
   if (readWorkflow(params.id)) return NextResponse.json({ ok: false, error: 'the workflow file could not be removed' }, { status: 500 });
