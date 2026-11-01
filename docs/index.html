@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MuZe — Meta AI Business Operating Server · Talk to MUSE</title>
+<meta name="description" content="Interactive pitch page for MuZe, with MUSE the voice agent. Offline demo answers.">
+<style>
+:root{--bg:#0A0A0A;--red:#FF2A2A;--fg:#f2f2f2;--mut:#a3a3a3;--card:#141414}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 system-ui,Segoe UI,Helvetica,Arial,sans-serif}
+a{color:var(--red)}a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+.skip{position:absolute;left:-999px}.skip:focus{left:8px;top:8px;background:#000;padding:8px}
+header,section,footer{max-width:1040px;margin:0 auto;padding:32px 20px}
+h1{font-size:clamp(2rem,6vw,3.6rem);margin:.2em 0;line-height:1.1}h1 b{color:var(--red)}h2{color:#fff;border-left:4px solid var(--red);padding-left:12px}
+.hero{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:center}@media(max-width:760px){.hero{grid-template-columns:1fr}}
+canvas{width:100%;max-width:420px;aspect-ratio:1;display:block;margin:auto;cursor:pointer;border-radius:24px;background:radial-gradient(circle at 50% 40%,#2a0707,#0A0A0A 70%)}
+.chat{background:var(--card);border:1px solid #2a2a2a;border-radius:16px;padding:16px}
+.log{min-height:120px;max-height:260px;overflow:auto}.msg{margin:8px 0}.me{color:var(--mut)}.muse b{color:var(--red)}
+.badge{display:inline-block;font-size:12px;border:1px solid var(--red);color:var(--red);border-radius:999px;padding:2px 10px}
+form{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}input{flex:1;min-width:180px;min-height:44px;background:#000;color:var(--fg);border:1px solid #333;border-radius:10px;padding:0 12px}
+button{min-height:44px;min-width:44px;background:var(--red);color:#000;font-weight:700;border:0;border-radius:10px;padding:0 16px;cursor:pointer}button.ghost{background:transparent;color:var(--fg);border:1px solid #444}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}.card{background:var(--card);border:1px solid #222;border-radius:14px;padding:16px}
+.mut{color:var(--mut)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style></head><body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="hero" id="main">
+ <div><span class="badge">Meta Global AI Developer Hackathon 2026</span>
+ <h1>Mu<b>Z</b>e<br><span style="font-size:.5em">Meta AI Business Operating Server</span></h1>
+ <p>One Discord-style server for every Meta surface. Every agent action is a commit. Nothing ships until a human approves it.</p>
+ <p><a href="https://github.com/CodesbyFebin/Meta-Ai-OS">View the repo</a></p></div>
+ <div><canvas id="muse" width="420" height="420" role="img" aria-label="MUSE, an animated round red-and-black creature. Click to boop."></canvas></div>
+</header>
+<section aria-labelledby="talk"><h2 id="talk">Talk to MUSE</h2>
+<div class="chat"><p class="mut"><span class="badge">offline demo answers</span> MUSE answers from a fixed local FAQ in this page. No model, no network, nothing sent.</p>
+<div class="log" id="log" role="log" aria-live="polite"></div>
+<form id="f"><label for="q" class="skip">Ask MUSE</label><input id="q" placeholder="Ask: what is MuZe? is anything sent automatically?" autocomplete="off">
+<button type="submit">Ask</button><button type="button" class="ghost" id="mic" aria-pressed="false">🎤 Speak</button><button type="button" class="ghost" id="tts" aria-pressed="true">🔊 Voice on</button></form>
+<div class="chips" id="chips"></div></div></section>
+<section aria-labelledby="p"><h2 id="p">The problem</h2><p>Meta's business tools are fragmented: Business Suite, Creator Studio, WhatsApp Manager, Ads Manager, Instagram and Messenger inboxes. A founder running several brands lives in about 12 tabs.</p></section>
+<section aria-labelledby="s"><h2 id="s">The solution</h2><div class="grid">
+<div class="card"><h3>One server</h3><p>Brands are servers, Meta surfaces are channels, and your team and AI agents share the member list.</p></div>
+<div class="card"><h3>Git for agents</h3><p>Every post, reply and ad draft is a commit with an author, a diff and a status.</p></div>
+<div class="card"><h3>Human approval gate</h3><p>Jev binds approval to the hash of the exact payload. Changed payload, refused write. No auto-send.</p></div>
+<div class="card"><h3>MUSE voice harness</h3><p>Push-to-talk assistant that reads and drafts, and can never approve on its own.</p></div></div></section>
+<section aria-labelledby="w"><h2 id="w">Who it's for</h2><p><b>Businesses</b>: one inbox for WhatsApp, Messenger, Instagram and Facebook leads, ads kept as drafts. <b>Creators</b>: one content studio and calendar across Facebook, Instagram and Threads.</p>
+<p class="mut">Built with Llama. Meta product names belong to Meta. In this pitch nothing is connected to a live Meta account.</p></section>
+<footer><a href="https://github.com/CodesbyFebin/Meta-Ai-OS">github.com/CodesbyFebin/Meta-Ai-OS</a> · MIT licence</footer>
+<script id="faq-inline" type="application/json">{"label": "offline demo answers", "answers": [{"q": "what is muze", "k": ["what", "muze", "about", "product", "pitch"], "a": "MuZe is a Meta AI Business Operating Server: one Discord-style server where businesses and creators run Facebook, Instagram, Messenger, WhatsApp, Threads and ads drafts in one place, with every agent action recorded like a git commit."}, {"q": "why", "k": ["problem", "why", "tabs", "fragmented"], "a": "Meta's tools are spread across about a dozen tabs: Business Suite, Creator Studio, WhatsApp Manager, Ads Manager and more. MuZe puts them in one server with channels per surface."}, {"q": "approval", "k": ["approve", "approval", "safe", "jev", "send", "auto"], "a": "Nothing is sent automatically. Agents propose; a gate called Jev hashes the exact payload, and only a human-approved, unchanged payload can reach /api/dispatch."}, {"q": "commits", "k": ["git", "commit", "history", "revert", "blame"], "a": "Every agent action shows up as a commit with author, diff and status. A commit is only marked shipped after you approve it and it is actually sent."}, {"q": "llama", "k": ["llama", "model", "meta", "ai", "guard", "swarm"], "a": "MuZe uses the Meta Model API with a hard spend cap, plus an optional local Llama tier and a Llama Guard 3 check before anything reaches approval. Built with Llama."}, {"q": "who", "k": ["who", "creator", "business", "for"], "a": "Small businesses and creators who run several brands or pages and want one inbox, one content studio and one approval queue."}, {"q": "connected", "k": ["connected", "live", "facebook", "whatsapp", "instagram", "threads", "ads"], "a": "In this demo nothing is connected. Products without real credentials show Not connected in the app; ads and posts are drafts only."}, {"q": "muse", "k": ["muse", "you", "voice", "fur", "boop"], "a": "I'm MUSE, the voice agent of MuZe. In the app I can read your data and draft work, but I can never approve anything myself."}]}</script>
+<script>
+(()=>{const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+let FAQ=JSON.parse(document.getElementById('faq-inline').textContent);
+fetch('muse-faq.json').then(r=>r.ok&&r.json()).then(j=>{if(j)FAQ=j}).catch(()=>{});
+const c=document.getElementById('muse'),x=c.getContext('2d');let t=0,boop=0,speak=0,blink=0;
+function draw(){const W=c.width,H=c.height,cx=W/2,cy=H/2+20;x.clearRect(0,0,W,H);
+ const b=RM?0:Math.sin(t/30)*6,sq=1+boop*0.12,mouth=speak?Math.abs(Math.sin(t/4))*10:0;
+ x.save();x.translate(cx,cy+b);x.scale(sq,2-sq);
+ for(let i=0;i<140;i++){const a=i/140*Math.PI*2,r=150+(RM?0:Math.sin(t/12+i)*3);x.strokeStyle=i%2?'#FF2A2A':'#3a0b0b';x.lineWidth=3;x.beginPath();x.moveTo(Math.cos(a)*128,Math.sin(a)*118);x.lineTo(Math.cos(a)*r,Math.sin(a)*(r-10));x.stroke()}
+ x.fillStyle='#161616';[-1,1].forEach(s=>{x.beginPath();x.moveTo(s*70,-90);x.lineTo(s*100,-175);x.lineTo(s*20,-115);x.fill()});
+ x.beginPath();x.ellipse(0,0,140,128,0,0,7);x.fill();
+ const eh=blink>0?2:24;x.fillStyle='#FF2A2A';[-1,1].forEach(s=>{x.beginPath();x.ellipse(s*48,-14,18,eh,0,0,7);x.fill();if(eh>4){x.fillStyle='#fff';x.beginPath();x.arc(s*48+6,-22,6,0,7);x.fill();x.fillStyle='#FF2A2A'}});
+ x.fillStyle='rgba(255,42,42,.25)';[-1,1].forEach(s=>{x.beginPath();x.ellipse(s*88,24,20,10,0,0,7);x.fill()});
+ x.strokeStyle='#fff';x.lineWidth=4;x.beginPath();x.moveTo(-18,40);x.quadraticCurveTo(-9,52+mouth,0,40);x.quadraticCurveTo(9,52+mouth,18,40);x.stroke();x.restore();
+ t++;boop*=.9;if(blink>0)blink--;else if(Math.random()<.006)blink=8;if(!RM||boop>.01||speak)requestAnimationFrame(draw)}
+const kick=()=>{if(RM)requestAnimationFrame(draw)};draw();
+c.addEventListener('click',()=>{boop=1;kick();say('Boop! Ask me about MuZe.')});
+const log=document.getElementById('log');let tts=!!window.speechSynthesis;
+function add(cls,who,txt){const d=document.createElement('div');d.className='msg '+cls;d.innerHTML='<b></b> ';d.firstChild.textContent=who+':';d.append(txt);log.append(d);log.scrollTop=1e9}
+function say(a){add('muse','MUSE',a);if(tts&&window.speechSynthesis){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(a);u.onstart=()=>{speak=1;kick()};u.onend=()=>{speak=0};speechSynthesis.speak(u)}else{speak=1;kick();setTimeout(()=>speak=0,1500)}}
+function answer(q){const w=q.toLowerCase();let best=null,s=0;for(const it of FAQ.answers){const n=it.k.filter(k=>w.includes(k)).length;if(n>s){s=n;best=it}}
+ return best?best.a:"That one isn't in my offline demo answers. Try: what is MuZe, why, approvals, commits, Llama, who it's for, or what's connected."}
+function ask(q){if(!q.trim())return;add('me','You',q);say(answer(q))}
+document.getElementById('f').onsubmit=e=>{e.preventDefault();const i=document.getElementById('q');ask(i.value);i.value=''};
+['What is MuZe?','Is anything sent automatically?','How do commits work?','Is it built with Llama?','Who is it for?'].forEach(q=>{const b=document.createElement('button');b.type='button';b.className='ghost';b.textContent=q;b.onclick=()=>ask(q);document.getElementById('chips').append(b)});
+const tb=document.getElementById('tts');tb.onclick=()=>{tts=!tts;tb.setAttribute('aria-pressed',tts);tb.textContent=tts?'🔊 Voice on':'🔇 Voice off';if(!tts&&window.speechSynthesis)speechSynthesis.cancel()};
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition,mic=document.getElementById('mic');
+if(!SR){mic.disabled=true;mic.title='Speech recognition is not supported in this browser';mic.textContent='🎤 Not supported'}
+else mic.onclick=()=>{const r=new SR();r.lang='en-IN';r.interimResults=false;mic.setAttribute('aria-pressed','true');mic.textContent='🎤 Listening…';r.onresult=e=>ask(e.results[0][0].transcript);r.onend=()=>{mic.setAttribute('aria-pressed','false');mic.textContent='🎤 Speak'};r.start()};
+add('muse','MUSE','Hi, I\'m MUSE. Click me, type, or press Speak. These are offline demo answers.');})();
+</script></body></html>

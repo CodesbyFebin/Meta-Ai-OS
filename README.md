@@ -1,181 +1,109 @@
-# MeTaBos — Cyber AI Business OS
+<p align="center"><img src="docs/assets/hero-banner.svg" alt="MuZe — Meta AI Business Operating Server, with the MUSE silhouette" width="100%"></p>
 
-**A self-hostable business workspace for founders and small businesses, with
-SQLite invoicing, inventory, CRM, approval-gated AI tasks and audit evidence.**
+<h3 align="center">One Discord-style server for every Meta surface. Every agent action is a commit. Nothing ships until you approve it.</h3>
 
-Run your business. Approve what matters. Verify what happened.
+<p align="center"><a href="https://codesbyfebin.github.io/Meta-Ai-OS/"><img src="docs/assets/talk-to-muse.svg" alt="Talk to MUSE: open the interactive pitch page" width="560"></a></p>
 
-[![CI](https://github.com/CodesbyFebin/MuzeBOS--The-Zero-Trust-Business-OS/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/CodesbyFebin/MuzeBOS--The-Zero-Trust-Business-OS/actions/workflows/ci.yml)
+> **Note:** GitHub READMEs can't run JavaScript, so MUSE can't talk inside this page. The button opens [`docs/index.html`](docs/index.html), a single-file pitch page where you can click MUSE or talk to it with your browser's Web Speech API. Its replies are **offline demo answers** from [`docs/muse-faq.json`](docs/muse-faq.json). The GitHub Pages link only works once Pages is enabled for this repo; until then, open the file locally.
 
-[Documentation](docs/search/README.md) · [Self-host](docs/search/self-hosting.md) ·
-[Invoice approvals](docs/search/invoice-approvals.md) ·
-[WebLLM inference](docs/search/webllm-inference.md) ·
-[Evidence and limits](docs/search/verification.md) · [Contribute](CONTRIBUTING.md)
+## The problem
+Meta's business tools are fragmented. Business Suite for Pages, Creator Studio for Instagram, WhatsApp Manager, Ads Manager, and separate inboxes for Messenger and Instagram DMs. A founder or agency running several brands ends up with about **12 tabs open**, and no single record of who (or which AI) did what.
 
-**Release posture: single-operator local preview (package 0.1.1).** The project
-name describes a security design goal; it is not an independent certification or
-production-readiness claim. MeTaBos extends the attributed FounderOS/GladOS source.
+## The solution
+**MuZe** (the app is called MeTaBos in the code) is one server:
 
-## Why this exists
+- **Discord-style shell.** Brands are servers, Meta surfaces are channels, and your team and AI agents share the member list.
+- **Git for agents.** Every post, inbox reply and ad draft is recorded as a commit with an author, a diff and a status. A commit is only marked *shipped* after a human approved it and it was actually sent.
+- **Human approval gate.** **Jev** binds each approval to the hash of the exact payload. If the payload changes, the write is refused. There is no auto-send and no auto-approve path; only approved items reach `/api/dispatch`.
+- **MUSE, the voice agentic harness.** Push-to-talk assistant that reads your data and drafts work. It can't approve anything itself.
 
-More businesses are now run by one person with AI help. Alibaba.com's president
-told Business Insider that an estimated 30% to 40% of the platform's customers are
-solo entrepreneurs, with AI agents doing work such as listings, customer service
-and marketing ([Business Insider, 2026](https://www.businessinsider.com/ai-agents-one-person-companies-china-openclaw-alibaba-president-2026-3)).
-In PwC's May 2025 survey of 308 US executives, 79% said AI agents were already
-being adopted in their companies, and 66% of those adopters reported measurable
-productivity value ([PwC AI agent survey](https://www.pwc.com/us/en/tech-effect/ai-analytics/ai-agent-survey.html)).
+## Who it's for
+- **Businesses:** one unified inbox for WhatsApp, Messenger, Instagram and Facebook leads, ads kept as drafts, GST/ops tools.
+- **Creators:** one content studio and calendar for Facebook, Instagram and Threads, with a single approval queue.
 
-The problem: a solo founder wants AI to take on sales follow-ups, invoicing,
-stock and support, but giving a model write access to money and inventory is a
-risk. MeTaBos keeps the AI as a **copilot**: it drafts, classifies, summarizes
-and proposes structured actions; the owner reviews the exact payload and
-approves; deterministic code does the write and records evidence.
+## Demo
+[![MUSE in the Studio scene](docs/assets/muse-fur-studio.png)](docs/assets/muse-fur-studio.png)
 
-**Who it's for:** solo founders, one-person companies and small teams who want
-their commerce, money, messaging and AI help in one self-hosted workspace.
+| Fur Lab | 2D fallback | Mobile |
+|---|---|---|
+| ![Fur Lab panel](docs/assets/muse-fur-lab.png) | ![2D MUSE fallback](docs/assets/muse-fur-2d-fallback.png) | ![Mobile layout](docs/assets/muse-fur-mobile.png) |
 
-**Governance ideas, as built in this repo:**
-- **Jev approvals** bound to a hash of the exact payload; any change after
-  approval invalidates it.
-- **Atomic invoice issuance** with an in-transaction stock recheck,
-  idempotency keys and money in integer minor units.
-- **Spend limits** for model calls stored in the database (per-call and
-  per-day ceilings).
-- **Role checks on the server** for every business-record read and write.
-- **Hash-chained audit evidence** you can verify and export.
-- **Meta model adapters** behind a provider interface; nothing runs live
-  without a configured key and prices.
+Screenshots were taken in headless Chromium with software GL (no GPU). A demo GIF is still to be recorded; see [DEMO-SCRIPT.md](DEMO-SCRIPT.md).
 
-**Real stack:** Next.js 15, TypeScript, SQLite (better-sqlite3), vitest and
-Playwright. No other database, queue, vector store or orchestration service is
-required.
-
-## Hackathon reviewers
-
-This is an **existing FounderOS-based product**. Only the new submission-PR delta
-is proposed as event work: Baseten Muse Spark Open routing, explicit Meta Spark
-selection, a completed-draft → Jev reminder handoff and reproducible demo tooling.
-Provider adapters are implemented and fixture-tested; **live API execution remains
-unverified**. No eligibility, prize or entire-product event-build claim is made.
-
-Start with [provenance and contribution disclosure](HACKATHON.md),
-[the judge guide](docs/hackathon/JUDGES.md),
-[the demo/video script](docs/hackathon/DEMO.md) and
-[qualification evidence](docs/hackathon/VERIFICATION.md).
-`npm run hackathon:demo -- --fixture both` runs without model credentials.
-
-## What is MeTaBos?
-
-MeTaBos organizes daily business work into Orders, Money, Talk, Stock and Growth,
-with weekly operations/AI tools and setup controls below. Mission Control reads
-persisted records for approvals, reminders, stock alerts, activity and real
-customer/product/order relationships. Its 18 primary destinations organize the
-205 requested pillars; a page's local scope and provider dependencies remain
-explicit. Page count is not a count of fully deployed integrations.
-
-| Area | Implemented scope | Boundary |
-| --- | --- | --- |
-| Commerce | Customers, catalog, order drafts, merchant invoice profile and issuance | Merchant-supplied business/tax details |
-| Approval | Exact canonical payload hash, expiry, stock recheck and atomic commit | A model cannot authorize its own business write |
-| Inventory | Stock movements and bounded local stock/warehouse modules | Supplier and delivery services need separate integration |
-| Money | Integer minor units, invoice snapshots, UPI request and manual reconciliation | Request ≠ settlement; no universal zero-fee claim |
-| Workflows | Durable local workflow state, approvals, retry policy and evidence | Only explicitly implemented tools execute |
-| AI workspace | Persistent draft queue, Jev review, bounded delegation and worker leases | Live providers and physical WebGPU inference unverified |
-| Provider pages | Local records, secret references, connection probes and queued outboxes | Configuration/probe ≠ successful dispatch |
-| Evidence | Filterable/exportable local event chain and source-linked records | A DB administrator can rewrite an unanchored chain |
-
-## Run on your own machine
-
-Use **Node.js 22** and the locked dependencies:
-
-```sh
-npm ci
-npm run dev
+## Architecture
+```mermaid
+flowchart LR
+  U[Owner / team] -->|voice, click| SH[Meta Server shell<br/>servers · channels · Agent Hub]
+  MUSE[MUSE voice harness] --> SH
+  SH --> AG[Agents & Claw Swarm]
+  AG -->|plan / draft| MM[Meta Model API<br/>USD hard spend cap]
+  AG -->|classify, short replies| LL[Optional local Llama 3.2]
+  AG --> LG[Llama Guard 3 check]
+  LG --> C[Commit log<br/>git-for-agents]
+  C --> JEV{Jev approval<br/>payload hash}
+  JEV -->|approved, unchanged| D[/api/dispatch/]
+  JEV -->|changed or rejected| X[Refused]
+  D --> META[Meta surfaces<br/>WhatsApp · IG · Messenger · FB · Threads · Ads]
+  D --> DB[(SQLite workspace DB<br/>evidence log)]
 ```
 
-Open `http://localhost:4100`. Real mode is the default; no fabricated business
-records are inserted. Configure an operator password under Settings → Security
-before any remote access. The startup wrapper restricts binding until setup.
-For production compilation: `npm run build`, then `npm start`.
+## Built with Llama
+MuZe uses the **Meta Model API** for planning and drafting (with a hard spend cap and a token saver), an **optional local Llama 3.2** tier for classification and short replies, and **Llama Guard 3 1B** as a safety check before anything reaches Jev. When a model is not reachable, the app shows *Not connected* rather than fake output.
 
-Read [self-hosting](docs/search/self-hosting.md) and
-[operations/recovery](docs/METABOS-OPERATIONS.md). `MUZEBOS_DB` selects commerce
-storage; `GLADOS_DB` selects inherited workspace storage. Secrets remain in
-ignored environment files. Use private TLS and the correct `MUZEBOS_ORIGIN`.
-Responsive web access is supported; no native Android/iOS or offline-sync release
-is claimed.
+**Built with Llama.** Llama models are subject to the Llama Community License.
 
-## Try approval-bound invoicing
-
-1. Add merchant details, a customer and a product with stock.
-2. Create a draft; review quantities, prices, tax and the exact payload hash.
-3. Approve and issue before expiry. Stock is rechecked inside the transaction.
-4. Inspect the issued invoice, inventory movement and audit evidence.
-5. Payment stays pending until evidence is recorded. Independently check the bank
-   before manual reconciliation; it is labelled separately from provider settlement.
-
-See [invoice approval](docs/search/invoice-approvals.md),
-[API](docs/METABOS-API.md) and [UPI/tax limits](docs/search/upi-and-tax.md).
-Local tax calculations are not GST filing or government e-invoice registration.
-
-## WebLLM, Jev and model routing
-
-Open Brain → Inference & agent workspace (`/workspace/brain/inference`) for
-persistent tasks. Small/medium/large routing is deterministic. Jev binds approval
-to the exact task, model and configuration. Browser WebLLM loads an explicit
-Llama model in a Web Worker; a separate Node worker supports configured Ollama,
-Meta Wonder API and OpenRouter text routes. Failed attempts require review;
-there is no silent paid fallback in this persistent workspace.
-
-The merged feature stack also includes `/workspace/brain/runtime`, an experimental
-interactive proposal interface with different cost/fallback behavior. Its write
-proposal gate is not the persistent dispatch gate. See
-[the distinction and setup](docs/search/webllm-inference.md).
-
-Muse Code/Wonder Full, OpenClaw tool execution and zkVM proving remain blocked
-until their external runtime, isolation and verification bridges are qualified.
-No live model call, 24-hour uptime or zk proof is claimed by this release.
-
-## Verification and contributions
-
-```sh
-npm run typecheck
-npm test -- --maxWorkers=4 --minWorkers=1
+## Quick start
+```bash
+git clone https://github.com/CodesbyFebin/Meta-Ai-OS && cd Meta-Ai-OS
+npm ci                      # Node 20+
+cp .env.example .env.local  # optional; every provider stays "Not connected" without keys
+npm run dev                 # http://localhost:3000
+npm test                    # vitest
 npm run build
-npm run docs:build
 ```
+Provider variables are documented in [docs/PROVIDER-ENV.md](docs/PROVIDER-ENV.md). Never commit real keys.
 
-Browser qualification uses disposable DBs and Playwright; never point it at your
-business database. Read [the integration/search release record](docs/METABOS-SEARCH-RELEASE.md)
-for this change's executed checks and [feature/evidence limits](docs/search/verification.md)
-for what they establish. Older verification reports apply to their recorded revisions.
+## Verification
+### This repo (re-run after re-sequencing)
+Run on 2 Nov 2026, about 4:30–4:50 AM IST, on the box (Node 20.19.2, Linux, no GPU), after `npm ci`. Local checks only.
 
-[Contributing](CONTRIBUTING.md) explains reproduction, tests and evidence standards.
-[Security reporting](SECURITY.md) covers private disclosure. Do not post credentials,
-customer data or private invoice records in issues.
+| Check | Result |
+|---|---|
+| `npx tsc --noEmit` | pass (exit 0) |
+| `npm run build` | pass (exit 0); one warning from `@miosa/sdk` ("Critical dependency: the request of a dependency is an expression") |
+| `npx vitest run` | 5405 passed, 9 skipped, 4 failed (5418 tests, 424 files). The full run overlapped with a second accidental run on the same machine; re-running the 5 failing files alone left **2 failed tests + 1 file that fails to load**, all in the lab area and the same ones the development repo already lists as failing: `globSync is not a function` on Node 20 (`lab-v2-g*`) and a 30 s timeout in `lab-ledger-retention`. `lab-view` and `legacy-lab` passed alone. |
+| Secret scan (gitleaks 8.21.2, all commits) | 7 findings, all reviewed as non-secrets: placeholder values in test files (`xoxb-very-secret-9876`, `apify_api_TESTSECRET123`, `zk_live_abc123`, a dummy UUID) and an empty `.env.example` key. `rg` for `ghp_`, `sk-`, `EAA…`, `LLM_…=`, `AKIA` and private-key headers: no real keys. |
+| Route crawl, e2e, a11y | not re-run in this repo; see the development results below |
 
-## Public documentation and search
 
-The answer-oriented [documentation hub](docs/search/README.md) covers concrete
-setup, invoice, inference, payment and data questions. `npm run docs:build` exports
-seven static pages to `site/` with distinct metadata, canonical links, structured
-source/article data and a public-docs-only sitemap. Those pages are prepared for
-separate hosting; their generated canonical URLs do not mean deployment is live.
-The operational app sends `noindex` directives and keeps its authentication gate.
+### Development repo (quoted from [docs/VERIFICATION-REPORT.md](docs/VERIFICATION-REPORT.md), local checks only, 2 Nov 2026 IST)
+> | `npx vitest run` (full) | 5376 passed, 9 skipped. 2 tests failed and 1 file failed to load, all in the lab area, which was already failing before this work |
+> | Route crawl | 244/244 routes return 200 with 0 stubs on desktop and on mobile |
+> | Local swarm e2e | pass. "Run on local swarm" ran the claw-local Llama-3.2-3B in 18–36 s at $0. Llama Guard returned `safe`, a Brain draft was saved, and Jev showed `awaiting_approval`. Nothing was sent. |
+> | External sends | BLOCKED by design. Only approved Jev items reach `/api/dispatch`; the Meta credentials are not live here |
+> | MUSE fur | Not measured: real-GPU fps. |
 
-No special file, keyword count or schema guarantees search rankings or AI citations.
-See [search implementation and measurement](docs/SEARCH-OPTIMIZATION.md).
+The report states it "is not a production-readiness claim". Meta Suite channels without real credentials (Facebook, Threads, Messenger, Ads) show **Not connected**; no live Meta account is wired in this repo.
 
-## Attribution and upstream work
+## Safety model
+1. Agents only **propose**. Drafts pass Llama Guard 3, then wait in Jev.
+2. Jev approves the canonical hash of the exact payload; tampering after approval is refused (covered by `tests/release-gate1-approval.test.ts`).
+3. Only approved, unchanged items reach `/api/dispatch`, and only to a connected sender.
+4. MUSE can read and draft; voice approval is refused by design.
+5. Spend is capped per workspace and per agent. See [SECURITY.md](SECURITY.md).
 
-Derived from the supplied FounderOS (on GladOS) source. Original MIT copyright
-and attribution remain in [LICENSE](LICENSE); upstream names remain in internal
-compatibility code. MeTaBos changes: CodesbyFebin, 2026.
+## Pre-existing code disclosure
+The Meta Global AI Developer Hackathon kicked off on **26 Oct 2026, 9:30 PM IST**. The first commit here, `chore: import pre-existing code (pre-kickoff, Oct 26 2026)`, is the development repo as of commit `1105e64` (26 Oct 2026, 7:35 PM IST), the last commit before kickoff. It includes a FounderOS fork (MIT) and earlier MuzeBOS work. Everything after it was built during the event. Details and ambiguities: [HACKATHON.md](HACKATHON.md).
 
-The 29-repository review separates source/licensing from live integrations.
-Read [reviewed integrations](docs/METABOS-UPSTREAM-INTEGRATIONS.md) and
-[third-party notices](THIRD_PARTY_NOTICES.md). External services, model weights and
-provider terms retain their own licences and limits.
+**History note:** this repo's history was **re-sequenced** from the development repo [CodesbyFebin/MuzeBOS--The-Zero-Trust-Business-OS](https://github.com/CodesbyFebin/MuzeBOS--The-Zero-Trust-Business-OS) (draft PRs #50–#68) into readable commits grouped by area. Commit dates are when this repo was assembled, not backdated. The original granular history stays in the development repo.
 
-> **Naming note:** the product is now MeTaBos. Environment variables keep the `MUZEBOS_` prefix so existing deployments keep working, and an existing `data/muzebos-business.db` is still opened when no `data/metabos-business.db` exists. The GitHub repo name is unchanged.
+## Third-party credits
+See [THIRD_PARTY.md](THIRD_PARTY.md) and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md): FounderOS (MIT), agentshield, ai-employees, founder-skill, ai-agent-onboarding (licences in `vendor/`), three.js (MIT). Meta, Facebook, Instagram, Messenger, WhatsApp, Threads and Llama are trademarks of Meta; this project is not affiliated with or endorsed by Meta.
+
+## Team
+**Febin Francis** ([@CodesbyFebin](https://github.com/CodesbyFebin)), Kochi, Kerala, India. Solo, indie track.
+
+## Licence
+[MIT](LICENSE), matching the development repo.
+
+<sub>The previous MeTaBos README is kept at [docs/METABOS-README.md](docs/METABOS-README.md).</sub>

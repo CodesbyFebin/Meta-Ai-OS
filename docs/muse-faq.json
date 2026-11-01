@@ -1,0 +1,10 @@
+{"label":"offline demo answers","answers":[
+{"q":"what is muze","k":["what","muze","about","product","pitch"],"a":"MuZe is a Meta AI Business Operating Server: one Discord-style server where businesses and creators run Facebook, Instagram, Messenger, WhatsApp, Threads and ads drafts in one place, with every agent action recorded like a git commit."},
+{"q":"why","k":["problem","why","tabs","fragmented"],"a":"Meta's tools are spread across about a dozen tabs: Business Suite, Creator Studio, WhatsApp Manager, Ads Manager and more. MuZe puts them in one server with channels per surface."},
+{"q":"approval","k":["approve","approval","safe","jev","send","auto"],"a":"Nothing is sent automatically. Agents propose; a gate called Jev hashes the exact payload, and only a human-approved, unchanged payload can reach /api/dispatch."},
+{"q":"commits","k":["git","commit","history","revert","blame"],"a":"Every agent action shows up as a commit with author, diff and status. A commit is only marked shipped after you approve it and it is actually sent."},
+{"q":"llama","k":["llama","model","meta","ai","guard","swarm"],"a":"MuZe uses the Meta Model API with a hard spend cap, plus an optional local Llama tier and a Llama Guard 3 check before anything reaches approval. Built with Llama."},
+{"q":"who","k":["who","creator","business","for"],"a":"Small businesses and creators who run several brands or pages and want one inbox, one content studio and one approval queue."},
+{"q":"connected","k":["connected","live","facebook","whatsapp","instagram","threads","ads"],"a":"In this demo nothing is connected. Products without real credentials show Not connected in the app; ads and posts are drafts only."},
+{"q":"muse","k":["muse","you","voice","fur","boop"],"a":"I'm MUSE, the voice agent of MuZe. In the app I can read your data and draft work, but I can never approve anything myself."}
+]}
