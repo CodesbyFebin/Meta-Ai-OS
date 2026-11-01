@@ -1,8 +1,9 @@
+import { memberRead } from '@/lib/metabos/member-read';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
-import { businessStore, BusinessError } from '@/lib/muzebos/store';
-import { businessAccess } from '@/lib/muzebos/http';
-import { describeWorkflow, WorkflowEngine, WORKFLOWS } from '@/lib/muzebos/workflows';
+import { businessStore, BusinessError } from '@/lib/metabos/store';
+import { businessAccess } from '@/lib/metabos/http';
+import { describeWorkflow, WorkflowEngine, WORKFLOWS } from '@/lib/metabos/workflows';
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 const hash = z.string().regex(/^[0-9a-f]{64}$/); const id = z.string().uuid();
@@ -24,7 +25,7 @@ function snapshot() {
   const store = businessStore(); const e = new WorkflowEngine(store);
   return { workflows: WORKFLOWS.map(describeWorkflow), runs: e.runs().map((r) => ({ ...r, steps: e.steps(r.id), events: e.events(r.id) })) };
 }
-export async function GET(req: Request) { try { businessAccess(req); return NextResponse.json(snapshot(), { headers: { 'Cache-Control': 'no-store' } }); } catch (e) { return failure(e); } }
+export async function GET(req: Request) { try { memberRead(req, 'finance.read'); return NextResponse.json(snapshot(), { headers: { 'Cache-Control': 'no-store' } }); } catch (e) { return failure(e); } }
 export async function POST(req: Request) {
   try {
     businessAccess(req);
