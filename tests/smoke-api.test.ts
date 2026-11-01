@@ -30,8 +30,30 @@ const ROUTES: RouteEntry[] = [
   { route: 'mission-control/layout', load: () => import('@/app/api/mission-control/layout/route'), url: 'http://localhost/api/mission-control/layout' },
   { route: 'brain-templates', load: () => import('@/app/api/brain-templates/route'), url: 'http://localhost/api/brain-templates' },
   { route: 'ai', load: () => import('@/app/api/ai/route'), url: 'http://localhost/api/ai' },
+  { route: 'ai/local', load: () => import('@/app/api/ai/local/route'), url: 'http://localhost/api/ai/local' },
+  { route: 'ai/budget', load: () => import('@/app/api/ai/budget/route'), url: 'http://localhost/api/ai/budget' },
+  { route: 'metabos/missions', load: () => import('@/app/api/metabos/missions/route'), url: 'http://localhost/api/metabos/missions' },
+  { route: 'metabos/goals', load: () => import('@/app/api/metabos/goals/route'), url: 'http://localhost/api/metabos/goals' },
+  { route: 'metabos/chief-of-staff', load: () => import('@/app/api/metabos/chief-of-staff/route'), url: 'http://localhost/api/metabos/chief-of-staff' },
+  { route: 'metabos/pipeline', load: () => import('@/app/api/metabos/pipeline/route'), url: 'http://localhost/api/metabos/pipeline' },
+  { route: 'metabos/hubs/[hub]', load: () => import('@/app/api/metabos/hubs/[hub]/route'), url: 'http://localhost/api/metabos/hubs/money', params: { hub: 'money' } },
+  { route: 'metabos/command-center', load: () => import('@/app/api/metabos/command-center/route'), url: 'http://localhost/api/metabos/command-center' },
+  { route: 'metabos/overdue', load: () => import('@/app/api/metabos/overdue/route'), url: 'http://localhost/api/metabos/overdue' },
+  { route: 'metabos/expenses', load: () => import('@/app/api/metabos/expenses/route'), url: 'http://localhost/api/metabos/expenses' },
+  { route: 'metabos/walls', load: () => import('@/app/api/metabos/walls/route'), url: 'http://localhost/api/metabos/walls' },
+  { route: 'metabos/memory', load: () => import('@/app/api/metabos/memory/route'), url: 'http://localhost/api/metabos/memory' },
+  { route: 'metabos/auth', load: () => import('@/app/api/metabos/auth/route'), url: 'http://localhost/api/metabos/auth' },
+  { route: 'metabos/founder', load: () => import('@/app/api/metabos/founder/route'), url: 'http://localhost/api/metabos/founder' },
   { route: 'analytics', load: () => import('@/app/api/analytics/route'), url: 'http://localhost/api/analytics' },
   { route: 'evidence', load: () => import('@/app/api/evidence/route'), url: 'http://localhost/api/evidence' },
+  { route: 'b3/mcp', load: () => import('@/app/api/b3/mcp/route'), url: 'http://localhost/api/b3/mcp' },
+  { route: 'b3/pipelines', load: () => import('@/app/api/b3/pipelines/route'), url: 'http://localhost/api/b3/pipelines' },
+  { route: 'b3/social', load: () => import('@/app/api/b3/social/route'), url: 'http://localhost/api/b3/social' },
+  { route: 'b3/swarms', load: () => import('@/app/api/b3/swarms/route'), url: 'http://localhost/api/b3/swarms' },
+  { route: 'b3/writing', load: () => import('@/app/api/b3/writing/route'), url: 'http://localhost/api/b3/writing' },
+  { route: 'agentverse', load: () => import('@/app/api/agentverse/route'), url: 'http://localhost/api/agentverse' },
+  { route: 'hub', load: () => import('@/app/api/hub/route'), url: 'http://localhost/api/hub' },
+  { route: 'server', load: () => import('@/app/api/server/route'), url: 'http://localhost/api/server' },
   { route: 'workflow-runs', load: () => import('@/app/api/workflow-runs/route'), url: 'http://localhost/api/workflow-runs' },
   { route: 'business', load: () => import('@/app/api/business/route'), url: 'http://localhost/api/business' },
   { route: 'agents', load: () => import('@/app/api/agents/route'), url: 'http://localhost/api/agents' },
@@ -128,6 +150,11 @@ const ROUTES: RouteEntry[] = [
   { route: 'lab/embeddings', load: () => import('@/app/api/lab/embeddings/route'), url: 'http://localhost/api/lab/embeddings' },
   { route: 'lab/rules', load: () => import('@/app/api/lab/rules/route'), url: 'http://localhost/api/lab/rules' },
   { route: 'life/map', load: () => import('@/app/api/life/map/route'), url: 'http://localhost/api/life/map' },
+  { route: 'dispatch', load: () => import('@/app/api/dispatch/route'), url: 'http://localhost/api/dispatch' },
+  { route: 'talk', load: () => import('@/app/api/talk/route'), url: 'http://localhost/api/talk' },
+  { route: 'brain-ops', load: () => import('@/app/api/brain-ops/route'), url: 'http://localhost/api/brain-ops' },
+  { route: 'data', load: () => import('@/app/api/data/route'), url: 'http://localhost/api/data' },
+  { route: 'passkeys', load: () => import('@/app/api/passkeys/route'), url: 'http://localhost/api/passkeys' },
   { route: 'metrics', load: () => import('@/app/api/metrics/route'), url: 'http://localhost/api/metrics' },
   { route: 'roadmap', load: () => import('@/app/api/roadmap/route'), url: 'http://localhost/api/roadmap' },
   { route: 'social', load: () => import('@/app/api/social/route'), url: 'http://localhost/api/social' },
@@ -164,12 +191,14 @@ function discoverGetRoutes(dir: string, base = ''): string[] {
   return out;
 }
 
+/** Routes that hold business records: a signed-out GET must be refused (401), never 200. */
+const MEMBER_ONLY = new Set(['metabos/hubs/[hub]', 'metabos/command-center', 'metabos/overdue', 'ai', 'ai/budget', 'ai/local', 'analytics', 'bookings', 'brain-templates', 'business', 'evidence', 'inference', 'infra/[page]', 'mission-control', 'mission-control/layout', 'modules/[module]', 'metabos/chief-of-staff', 'metabos/expenses', 'metabos/founder', 'metabos/goals', 'metabos/memory', 'metabos/missions', 'metabos/pipeline', 'metabos/walls', 'providers/[module]', 'workflow-runs', 'dispatch', 'passkeys', 'talk', 'brain-ops', 'data', 'b3/mcp', 'b3/pipelines', 'b3/social', 'b3/swarms', 'b3/writing', 'hub', 'server', 'agentverse']);
 describe('platform smoke — every GET API route answers 200 with JSON', () => {
-  test.each(ROUTES)('GET /api/$route', async ({ load, url, params }) => {
+  test.each(ROUTES)('GET /api/$route', async ({ route, load, url, params }) => {
     const mod = await load();
     expect(mod.GET, 'route should export GET').toBeTypeOf('function');
     const res = (await mod.GET!(new Request(url), { params })) as Response;
-    expect(res.status, `GET ${url} should be 200 (honest state, not 500/400)`).toBe(200);
+    expect(res.status, `GET ${url} should be ${MEMBER_ONLY.has(route) ? '401 signed out' : '200 (honest state, not 500/400)'}`).toBe(MEMBER_ONLY.has(route) ? 401 : 200);
     const body = await res.json();
     expect(body && typeof body === 'object').toBe(true);
   }, 20_000);
@@ -192,7 +221,7 @@ describe('platform smoke — every GET API route answers 200 with JSON', () => {
       'lab/oauth/[provider]/callback',
       // serves the contact sheet image (raw bytes, 404 without a sheet); covered in tests/lab-gen-frames.test.ts
       'lab/frames',
-      // Meta subscription challenge: text/plain, 503/403 without a token; covered in tests/muzebos-webhooks.test.ts
+      // Meta subscription challenge: text/plain, 503/403 without a token; covered in tests/metabos-webhooks.test.ts
       'webhooks/[source]',
     ]);
     const discovered = discoverGetRoutes(path.join(process.cwd(), 'app', 'api')).filter((r) => !IGNORE.has(r)).sort();
@@ -238,7 +267,7 @@ describe('Content Lab v2 lane S smoke (AC-08-4, 09.7)', () => {
   }, 20_000);
   test('GET /api/lab/oauth/youtube/callback with no params answers 200 "No sign-in in progress."', async () => {
     const { GET } = await import('@/app/api/lab/oauth/[provider]/callback/route');
-    const res = await GET(new Request('http://localhost/api/lab/oauth/youtube/callback'), { params: { provider: 'youtube' } });
+    const res = await GET(new Request('http://localhost/api/lab/oauth/youtube/callback'), { params: Promise.resolve({ provider: "youtube" }) });
     expect(res.status).toBe(200);
     expect(await res.text()).toBe('No sign-in in progress.');
   });

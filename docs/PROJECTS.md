@@ -2,17 +2,17 @@
 
 Updated: 2026-10-26
 
-## MuzeBOS commerce and reference UI
+## MeTaBos commerce and reference UI
 
 | Area | State |
 | --- | --- |
 | FounderOS source import and MIT attribution | Implemented |
-| MuzeBOS shell, reference styling, real-data home | Implemented |
+| MeTaBos shell, reference styling, real-data home | Implemented |
 | Local customers, products, invoice drafts | Implemented |
 | Exact approval binding and transactional stock | Implemented |
 | Merchant profile, print invoice, UPI deep link | Implemented |
 | Local evidence graph and hash chain | Implemented |
-| Verification | See MUZEBOS-VERIFICATION.md |
+| Verification | See METABOS-VERIFICATION.md |
 | Passkeys, RBAC, multiple workspaces | Not implemented |
 | Durable commerce workers and external messaging | Not implemented |
 | Live Meta AI/vision/payment verification | Not configured or executed |
@@ -32,7 +32,7 @@ Updated: 2026-10-26
 | --- | --- |
 | 18 sidebar destinations, five pinned utilities | Implemented |
 | 200 categorized tools plus five utility hubs | Organized; individual capability status remains explicit |
-| Real Mission Control, graph, polling and stale-state display | Verified locally; see MUZEBOS-MISSION-VERIFICATION.md |
+| Real Mission Control, graph, polling and stale-state display | Verified locally; see METABOS-MISSION-VERIFICATION.md |
 | Persistent reminders with due dates and completion | Implemented |
 | GitBook invitation | No invitation accepted or documentation published |
 
@@ -42,9 +42,9 @@ Updated: 2026-10-26
 | --- | --- |
 | 29 shallow sparse clones, source revision and license catalog | Reviewed; all clones succeeded |
 | Four explicitly MIT-scoped imports | AgentShield parser, employee role/routine texts, founder skills, onboarding templates |
-| AI employee reference library and human review reminders | Verified locally; see MUZEBOS-INTEGRATION-VERIFICATION.md |
-| Browser-local limited agent permission review | Verified locally; see MUZEBOS-INTEGRATION-VERIFICATION.md |
-| SQLite resource reservations, overlap prevention and cancellation | Verified locally; see MUZEBOS-INTEGRATION-VERIFICATION.md |
+| AI employee reference library and human review reminders | Verified locally; see METABOS-INTEGRATION-VERIFICATION.md |
+| Browser-local limited agent permission review | Verified locally; see METABOS-INTEGRATION-VERIFICATION.md |
+| SQLite resource reservations, overlap prevention and cancellation | Verified locally; see METABOS-INTEGRATION-VERIFICATION.md |
 | Optional ERP/BI/server applications | Catalogued candidates; not deployed or connected |
 | Hypastack, Wave setup guide, HustleGPT | No implementation copied; license restrictions or missing grant |
 
@@ -59,7 +59,7 @@ GitHub CI and merge state are tracked live in [PR #1](https://github.com/Codesby
 
 | Area | State |
 | --- | --- |
-| Persistent inference queue, routing and exact-task Jev gate | Verified locally; see MUZEBOS-INFERENCE-VERIFICATION.md |
+| Persistent inference queue, routing and exact-task Jev gate | Verified locally; see METABOS-INFERENCE-VERIFICATION.md |
 | Leased browser/server workers, cancellation and bounded delegation | Implemented; domain and process tests pass |
 | WebLLM Web Worker and mobile control UI | Browser control checks passed; physical GPU inference unverified |
 | Ollama, Meta Wonder and OpenRouter text protocols | Implemented; fixture-tested, live endpoints/credentials not configured |
@@ -81,12 +81,41 @@ Inference publication and CI are tracked on `feat/inference-swarm` and the repos
 | Public README and seven answer-oriented guides | Verified metadata/links/rendering; evidence and limits remain explicit |
 | Static project documentation export | Built and rendered at desktop/mobile sizes; no Pages deployment claimed |
 | Private workspace indexing controls | Implemented; authentication retained |
-| About description/topics | Reviewed config and preview/apply command prepared; remote settings unverified |
-| Verification | See MUZEBOS-SEARCH-RELEASE.md |
+| About description/topics | Description and all 16 topics saved and verified on GitHub, October 27; Website remains blank pending deployment |
+| Verification | See METABOS-SEARCH-RELEASE.md |
 
 - [x] Inspect live PR dependency stack and source conflicts.
 - [x] Preserve both persistent inference and stacked business modules.
 - [x] Add accurate public answers, structured metadata and contribution guidance.
 - [x] Qualify focused behavior, production build, app/browser flows and public docs.
-- [x] Prepare the combined integration and full-suite CI merge gate; live merge state is linked in MUZEBOS-SEARCH-RELEASE.md.
+- [x] Prepare the combined integration and full-suite CI merge gate; live merge state is linked in METABOS-SEARCH-RELEASE.md.
 - [ ] Verify public-site deployment and search measurements separately.
+
+
+## Hackathon submission candidate — 2026-10-27
+
+Frozen pre-event baseline: `1105e64ca6c6791170e619d9f446c81b9e6aec22`.
+All prior feature PRs are merged and the repository is public. This new submission
+PR credits FounderOS and every existing MeTaBos feature as inherited/pre-event.
+
+- New: Baseten Spark Open adapter, Meta Spark model selection and response checks.
+- New: completed server draft to separately approved Jev reminder proposal.
+- New: bounded fixture/live demo runner and judge/video/X draft materials.
+- Qualification: 5,030 tests passed, 8 skipped; typecheck/build and four production browser suites passed. See `docs/hackathon/VERIFICATION.md`.
+- Blocked externally: live model calls, credits/access and provider spending setup.
+- Founder-owned: track/rules confirmation, video, X publication and platform submission.
+- No submission, live-model, 24/7 swarm, zkVM or eligibility claim.
+
+
+## Submission-readiness audit — 2026-10-28
+
+Audited remote main `4ce3a44` (tree `beb7902`), public repo and successful main CI.
+Submission remains blocked; a 100/100 readiness claim is unsupported.
+
+- Found P1: inference handoff links to a workflow view that hides agent proposals.
+- Audit patch: direct Jev-tab link and real browser/API/SQLite approval regression.
+- Fresh production npm audit: 12 flagged packages (1 critical, 7 high, 1 moderate, 3 low); reachability/upgrade triage pending, no exploit claim.
+- Still blocked: live Meta/Baseten evidence, permitted track, final video/platform receipt.
+- Competitive gap: fixed-reminder demo does not demonstrate useful business reasoning.
+- Full findings and closure conditions: `docs/hackathon/SUBMISSION-AUDIT.md`.
+- Patch qualification: 5,030 tests passed, 8 skipped; 41 focused checks passed; types/build and all four production browser suites passed, including the real Jev approval/reminder flow. Follow-up patch prepared for review.
