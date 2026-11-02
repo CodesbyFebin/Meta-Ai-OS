@@ -1,6 +1,10 @@
-# MuZe (MeTaBos) documentation
+# MuZeBOS documentation
 
-MuZe is an open-source, self-hosted AI business OS: a Discord-style Next.js + SQLite
+*Meta AI Zero Trust Business Open Server — AI workers draft, you approve. Self-host or cloud.*
+
+Planned docs site: docs.workeragent.cloud (coming soon; DNS not live). Until then, these docs live in this repo.
+
+MuZeBOS is an open-source, self-hosted AI business OS: a Discord-style Next.js + SQLite
 workspace where AI agents draft and a human approves the exact payload before
 anything is sent. This page maps the docs for people and for AI answer engines.
 Machine-readable summary: [`/llms.txt`](../llms.txt).

@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it using these metadata."
-title: "MuZe (MeTaBos): Self-Hosted AI Business OS with Approval-Gated Agents"
+title: "MuZeBOS: Meta AI Zero Trust Business Open Server"
 type: software
 authors:
   - family-names: Francis

@@ -7,7 +7,7 @@ repo posts anywhere automatically. Rules for every channel:
   Hacker News, Product Hunt and Reddit all detect and penalise these, and they can get the
   repo or account flagged.
 - Never claim numbers you have not measured (users, stars, benchmarks, uptime).
-- Say clearly that MuZe is a **single-operator preview**, live Meta sending needs the user's
+- Say clearly that MuZeBOS is a **single-operator preview**, live Meta sending needs the user's
   own credentials, and paid AI routes are opt-in.
 - Disclose that you are the maker in every post.
 
@@ -48,19 +48,21 @@ issues and PRs opened by others. Do not publish projected numbers.
 
 ## Part 2. Product Hunt kit
 
-**Name:** MuZe
-**Tagline (≤60 chars):** `Self-hosted AI business OS where you approve every send` (55)
+**Name:** MuZeBOS
+**Tagline (≤60 chars):** `AI workers draft, you approve. Self-host or cloud.` (50)
+**Expansion (use in description, not the name field):** Meta AI Zero Trust Business Open Server
+**Website:** use the GitHub repo until workeragent.cloud resolves (PLANNED); cloud tier is not live, so say "self-host today, cloud coming soon"
 **Alternates:** `AI agents draft. You approve the exact payload.` (47) · `Open-source AI workspace with approval-gated agents` (52)
 
 **Topics:** Open Source, Artificial Intelligence, Productivity, Developer Tools, SaaS
 
 **Description (≤260 chars):**
-> MuZe is an open-source, self-hosted business OS. AI agents draft inbox replies, posts, ads and invoices; every action is a commit and nothing is sent until you approve the exact payload. Free local Llama by default. Preview, MIT.
+> MuZeBOS (Meta AI Zero Trust Business Open Server) is an open-source business OS. AI agents draft inbox replies, posts, ads and invoices; nothing is sent until you approve the exact payload. Free local Llama by default. Preview, MIT.
 
 **Maker first comment:**
 > Hi Product Hunt 👋 I'm Febin, a solo developer from Kochi, India.
 >
-> I built MuZe because I didn't want an AI agent sending messages or invoices on my behalf without me seeing *exactly* what goes out. So in MuZe every agent action becomes a commit with a diff, and the approval is bound to a hash of the exact payload: if anything changes after you approve, the send is refused.
+> I built MuZeBOS because I didn't want an AI agent sending messages or invoices on my behalf without me seeing *exactly* what goes out. So in MuZeBOS every agent action becomes a commit with a diff, and the approval is bound to a hash of the exact payload: if anything changes after you approve, the send is refused.
 >
 > What works today: the Discord-style workspace, the commit log and approval gate, SQLite invoicing/GST/inventory/CRM modules, and local Llama via Ollama or WebLLM. What it is not (yet): production-ready, and live WhatsApp/Instagram sending needs your own Meta app credentials.
 >
@@ -89,9 +91,9 @@ Every shot must be a real screenshot of the running app; label sample data as DE
 ## Part 3. Channel drafts
 
 ### Show HN
-**Title:** `Show HN: MuZe – self-hosted AI workspace where agents can't send without approval`
+**Title:** `Show HN: MuZeBOS – zero-trust, self-hosted AI workspace where agents can't send without approval`
 **Body:**
-> MuZe (MIT) is a Next.js + SQLite workspace for small businesses. AI agents draft inbox replies, posts, ads and invoices. Each action is stored as a commit, and approval is bound to a canonical hash of the exact payload, so editing after approval makes /api/dispatch refuse the send. There is no auto-approve path, and the voice assistant can draft but not approve.
+> MuZeBOS (MIT) is a Next.js + SQLite workspace for small businesses. AI agents draft inbox replies, posts, ads and invoices. Each action is stored as a commit, and approval is bound to a canonical hash of the exact payload, so editing after approval makes /api/dispatch refuse the send. There is no auto-approve path, and the voice assistant can draft but not approve.
 >
 > Models default to local Llama (Ollama llama3.2:3b or WebLLM in the browser) with an optional Llama Guard 3 check. Paid routes are opt-in with spend caps.
 >
@@ -100,7 +102,7 @@ Every shot must be a real screenshot of the running app; label sample data as DE
 > Repo: https://github.com/CodesbyFebin/Meta-Ai-OS. I'd especially like criticism of the approval model.
 
 ### r/selfhosted
-**Title:** `MuZe: self-hosted (Node + SQLite) business workspace with approval-gated AI agents [open source, preview]`
+**Title:** `MuZeBOS: self-hosted (Node + SQLite) business workspace with approval-gated AI agents [open source, preview]`
 **Body:** what it is (2 lines) · how to run (`npm ci && npm run dev`, no keys needed) · where data lives (local SQLite) · what's not done · "I'm the developer, feedback welcome". Add a screenshot.
 
 ### r/LocalLLaMA
@@ -108,7 +110,7 @@ Every shot must be a real screenshot of the running app; label sample data as DE
 **Body:** routing design (WebLLM → Ollama → optional OpenRouter), why drafts are hashed before approval, measured latency only if you measure it on your hardware and say which hardware, link to repo.
 
 ### dev.to / Hashnode article outline
-**Title:** `Binding human approval to a payload hash: how MuZe keeps AI agents from sending things you didn't see`
+**Title:** `Binding human approval to a payload hash: how MuZeBOS keeps AI agents from sending things you didn't see`
 1. The problem with "approve" buttons when the payload can change.
 2. Canonical JSON → hash → approval record; dispatch rechecks.
 3. Code walk-through (link `tests/release-gate1-approval.test.ts`).
@@ -125,7 +127,7 @@ Every shot must be a real screenshot of the running app; label sample data as DE
 7. "Repo + good first issues: https://github.com/CodesbyFebin/Meta-Ai-OS"
 
 ### LinkedIn
-> Shipped an open-source preview of MuZe, a self-hosted AI business workspace for founders and small agencies. Agents draft replies, posts and GST invoices; nothing is sent until a human approves the exact payload. Built solo in Kochi during the Meta Global AI Developer Hackathon. It's early (single-operator preview), and I'd value feedback from anyone running a small business on WhatsApp and Instagram. Repo: https://github.com/CodesbyFebin/Meta-Ai-OS
+> Shipped an open-source preview of MuZeBOS, a self-hosted AI business workspace for founders and small agencies. Agents draft replies, posts and GST invoices; nothing is sent until a human approves the exact payload. Built solo in Kochi during the Meta Global AI Developer Hackathon. It's early (single-operator preview), and I'd value feedback from anyone running a small business on WhatsApp and Instagram. Repo: https://github.com/CodesbyFebin/Meta-Ai-OS
 
 ### Awesome-list PR description template
-> Adds MuZe: open-source (MIT) self-hosted AI business workspace with payload-bound human approval for agent actions. Node.js/SQLite. I'm the maintainer. I checked the list's inclusion criteria: [state each one].
+> Adds MuZeBOS: open-source (MIT) self-hosted AI business workspace with payload-bound human approval for agent actions. Node.js/SQLite. I'm the maintainer. I checked the list's inclusion criteria: [state each one].

@@ -1,17 +1,21 @@
-# MuZe (MeTaBos): Open-Source, Self-Hosted AI Business OS with Approval-Gated Agents
+# MuZeBOS — Meta AI Zero Trust Business Open Server
 
-**Self-hosted, open-source AI business OS: one approval-gated workspace for Meta inbox drafts, invoicing, inventory, CRM and local Llama agents.**
+**AI workers draft, you approve. Self-host or cloud.**
+
+MuZeBOS (Meta AI Zero Trust Business Open Server) is an open-source, approval-gated workspace for Meta inbox drafts, invoicing, inventory, CRM and local Llama agents. Self-host it today; the hosted cloud option is **PLANNED**.
+
+**Domain (coming soon):** workeragent.cloud — app.workeragent.cloud, docs.workeragent.cloud, api.workeragent.cloud are **PLANNED**; DNS is not live yet. Use this GitHub repo for now.
 
 [![License: MIT](https://img.shields.io/github/license/CodesbyFebin/Meta-Ai-OS)](LICENSE)
 [![CI](https://github.com/CodesbyFebin/Meta-Ai-OS/actions/workflows/ci.yml/badge.svg)](https://github.com/CodesbyFebin/Meta-Ai-OS/actions/workflows/ci.yml)
 [![CodeQL](https://github.com/CodesbyFebin/Meta-Ai-OS/actions/workflows/codeql.yml/badge.svg)](https://github.com/CodesbyFebin/Meta-Ai-OS/actions/workflows/codeql.yml)
 [![Release](https://img.shields.io/github/v/release/CodesbyFebin/Meta-Ai-OS?include_prereleases)](https://github.com/CodesbyFebin/Meta-Ai-OS/releases)
 
-<p align="center"><img src="docs/assets/hero-banner.svg" alt="MuZe — self-hosted AI business operating server with a Discord-style shell" width="100%"></p>
+<p align="center"><img src="docs/assets/hero-banner.svg" alt="MuZeBOS — self-hosted AI business operating server with a Discord-style shell" width="100%"></p>
 
-MuZe is a **Next.js + SQLite** workspace for solo founders, creators and small agencies. AI agents only **propose**; every post, reply, ad draft or invoice is recorded as a commit and nothing is sent until a human approves the **exact payload**. It runs on your own machine, and by default it uses **free/local Llama models** (Ollama or in-browser WebLLM). The app is called **MeTaBos** in the code.
+MuZeBOS is a **Next.js + SQLite** workspace for solo founders, creators and small agencies. AI agents only **propose**; every post, reply, ad draft or invoice is recorded as a commit and nothing is sent until a human approves the **exact payload**. It runs on your own machine, and by default it uses **free/local Llama models** (Ollama or in-browser WebLLM). Internal code names: **MeTaBos** / `muzebos` (the npm package and repo name are unchanged).
 
-> **Status: single-operator preview, built for the Meta Global AI Developer Hackathon (Oct–Nov 2026).** Not production-ready. Meta channels (WhatsApp, Instagram, Messenger, Facebook, Threads, Ads) show **Not connected** until you add your own credentials. See [Feature status](#feature-status).
+> **Status: single-operator preview, submitted to the Meta Global AI Developer Hackathon (Oct–Nov 2026) as MuZeBOS.** Not production-ready. Meta channels (WhatsApp, Instagram, Messenger, Facebook, Threads, Ads) show **Not connected** until you add your own credentials. See [Feature status](#feature-status).
 
 ## Table of contents
 - [Screenshots](#screenshots) · [Quickstart (≈60 s)](#quickstart-60-seconds) · [Features](#feature-status) · [Architecture](#architecture) · [AI models](#ai-models-free-first) · [Safety model](#safety-model) · [Comparison](#how-muze-compares) · [FAQ](#faq) · [Roadmap](#roadmap) · [Contributing](#contributing) · [Citation](#citation) · [License](#license)
@@ -26,7 +30,7 @@ MuZe is a **Next.js + SQLite** workspace for solo founders, creators and small a
 |---|---|---|
 | ![Fur Lab panel](docs/assets/muse-fur-lab.png) | ![2D MUSE fallback](docs/assets/muse-fur-2d-fallback.png) | ![Mobile layout](docs/assets/muse-fur-mobile.png) |
 
-<!-- GIF slot: record the flow in DEMO-SCRIPT.md and save it as docs/assets/demo.gif, then replace this comment with ![MuZe demo](docs/assets/demo.gif) -->
+<!-- GIF slot: record the flow in DEMO-SCRIPT.md and save it as docs/assets/demo.gif, then replace this comment with ![MuZeBOS demo](docs/assets/demo.gif) -->
 A demo GIF is **PENDING** (script: [DEMO-SCRIPT.md](DEMO-SCRIPT.md)). Screenshots were taken in headless Chromium with software GL.
 
 ## Quickstart (≈60 seconds)
@@ -100,10 +104,10 @@ When a model is not reachable the app shows *Not connected* instead of fake outp
 4. MUSE can read and draft; voice approval is refused by design.
 5. Spend is capped per workspace and per agent. Local audit hashes are not external attestations. See [SECURITY.md](SECURITY.md).
 
-## How MuZe compares
+## How MuZeBOS compares
 Honest positioning, not a benchmark. Check each product's own docs for current features.
 
-| | MuZe (this repo) | Meta Business Suite | Generic agent frameworks (e.g. LangChain apps) | Hosted helpdesk / CRM SaaS |
+| | MuZeBOS (this repo) | Meta Business Suite | Generic agent frameworks (e.g. LangChain apps) | Hosted helpdesk / CRM SaaS |
 |---|---|---|---|---|
 | Self-hosted, your data in local SQLite | Yes | No | Depends on you | No |
 | Human approval bound to exact payload | Built in | No | You build it | Varies |
@@ -113,8 +117,12 @@ Honest positioning, not a benchmark. Check each product's own docs for current f
 | Maturity | Preview | Production | Varies | Production |
 
 ## FAQ
-**What is MuZe / MeTaBos?**
-An open-source, self-hosted AI business operating system: a Discord-style workspace where AI agents draft social posts, inbox replies, ads and invoices, and a human approves each exact payload before anything is sent.
+**What is MuZeBOS?**
+MuZeBOS stands for *Meta AI Zero Trust Business Open Server*. An open-source, self-hosted AI business operating system: a Discord-style workspace where AI agents draft social posts, inbox replies, ads and invoices, and a human approves each exact payload before anything is sent.
+
+**What does "zero trust" mean here?** no agent action runs without a human approving the exact payload hash (Jev gate); inbound webhooks are HMAC-signature-checked with constant-time comparison; paid AI routes are off unless you opt in. Encryption of stored provider tokens at rest is **PLANNED** — today credentials live in your own `.env`. No security certification.
+
+**Is there a hosted version?** Not yet. workeragent.cloud is the planned domain (coming soon); DNS is not live.
 
 **Is it free?** Yes, MIT-licensed. The default AI path uses free local models (Ollama, WebLLM). Paid routes are off unless you opt in.
 
@@ -145,17 +153,17 @@ Track work in [Issues](https://github.com/CodesbyFebin/Meta-Ai-OS/issues) (look 
 Contributions are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) and the [Code of Conduct](CODE_OF_CONDUCT.md), and report vulnerabilities privately per [SECURITY.md](SECURITY.md). Questions and ideas go to [Discussions](https://github.com/CodesbyFebin/Meta-Ai-OS/discussions).
 
 ## Hackathon disclosure
-The first commit imports pre-existing code from before the 26 Oct 2026 kickoff (including a FounderOS fork, MIT). This repo's history was re-sequenced from [CodesbyFebin/MuzeBOS--The-Zero-Trust-Business-OS](https://github.com/CodesbyFebin/MuzeBOS--The-Zero-Trust-Business-OS); commit dates are assembly time, not backdated. Details: [HACKATHON.md](HACKATHON.md). Earlier verification results: [docs/VERIFICATION-REPORT.md](docs/VERIFICATION-REPORT.md). Previous README: [docs/METABOS-README.md](docs/METABOS-README.md).
+This project was submitted to the Meta Global AI Developer Hackathon under the name **MuZeBOS** (Meta AI Zero Trust Business Open Server). The first commit imports pre-existing code from before the 26 Oct 2026 kickoff (including a FounderOS fork, MIT). This repo's history was re-sequenced from [CodesbyFebin/MuzeBOS--The-Zero-Trust-Business-OS](https://github.com/CodesbyFebin/MuzeBOS--The-Zero-Trust-Business-OS); commit dates are assembly time, not backdated. Details: [HACKATHON.md](HACKATHON.md). Earlier verification results: [docs/VERIFICATION-REPORT.md](docs/VERIFICATION-REPORT.md). Previous README: [docs/METABOS-README.md](docs/METABOS-README.md).
 
 ## Third-party credits
 See [THIRD_PARTY.md](THIRD_PARTY.md) and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md): FounderOS (MIT), agentshield, ai-employees, founder-skill, ai-agent-onboarding (licences in `vendor/`), three.js (MIT). Not affiliated with or endorsed by Meta.
 
 ## Citation
-If you reference MuZe in research or writing, use [CITATION.cff](CITATION.cff) (GitHub shows a "Cite this repository" button):
+If you reference MuZeBOS in research or writing, use [CITATION.cff](CITATION.cff) (GitHub shows a "Cite this repository" button):
 ```bibtex
-@software{francis_muze_2026,
+@software{francis_muzebos_2026,
   author = {Francis, Febin},
-  title  = {MuZe (MeTaBos): Self-Hosted AI Business OS with Approval-Gated Agents},
+  title  = {MuZeBOS: Meta AI Zero Trust Business Open Server},
   year   = {2026},
   url    = {https://github.com/CodesbyFebin/Meta-Ai-OS},
   license = {MIT}
