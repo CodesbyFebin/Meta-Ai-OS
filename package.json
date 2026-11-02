@@ -2,7 +2,7 @@
   "name": "metabos",
   "version": "0.1.1",
   "private": true,
-  "description": "Self-hostable business OS with SQLite invoicing, inventory, CRM, approval-gated AI tasks and audit evidence",
+  "description": "MuZeBOS — Meta AI Zero Trust Business Open Server. AI workers draft, you approve: self-hostable business OS with SQLite invoicing, inventory, CRM, approval-gated AI tasks and audit evidence",
   "scripts": {
     "dev": "node scripts/serve.mjs dev",
     "build": "next build",

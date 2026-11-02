@@ -1,0 +1,8 @@
+# Reviewed 2026-11-02: test fixtures, a dummy UUID and an empty .env.example key. Not secrets.
+50232bd6303cfff81c7563bd660f3cb32b9269f6:tests/metabos-modules-b.test.ts:generic-api-key:106
+46665215ae97b2947ee4a09744e3a62267eda318:.env.example:generic-api-key:117
+46665215ae97b2947ee4a09744e3a62267eda318:tests/creds.test.ts:generic-api-key:19
+46665215ae97b2947ee4a09744e3a62267eda318:tests/keys.test.ts:generic-api-key:30
+46665215ae97b2947ee4a09744e3a62267eda318:tests/lab-setup-keys.test.ts:generic-api-key:53
+46665215ae97b2947ee4a09744e3a62267eda318:tests/lab-v2-sheet-models.test.ts:generic-api-key:148
+46665215ae97b2947ee4a09744e3a62267eda318:tests/muzebos-modules-b.test.ts:generic-api-key:106
