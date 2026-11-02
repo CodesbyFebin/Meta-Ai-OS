@@ -522,7 +522,7 @@
           <div class="stat"><b id="stPets">0</b><span>pets &amp; boops</span></div>
           <div class="stat"><b id="stMsgs">0</b><span>messages kept</span></div>
           <div class="stat"><b id="stThemes">12</b><span>room themes</span></div>
-          <div class="stat"><b id="stCoats">5</b><span>fur coats</span></div>
+          <div class="stat"><b id="stCoats">6</b><span>fur coats</span></div>
         </div>
         <div class="card">
           <h3>Data <span class="rule"></span></h3>
@@ -808,6 +808,7 @@ render();setTimeout(lay,300);
 
   /* ============ 4 · themes (room + fur sync) ============ */
   var MUSE_THEMES = [
+    { name: 'MuZe Noir',      bg: '#0A0A0A', panel: '#121212', elev: '#1a1a1a', border: '#2a1212', accent: '#FF2A2A', sec: '#FF6A6A', furBase: '#1a0505', furTip: '#FF2A2A' },
     { name: 'Tokyo Night',    bg: '#0A0A0A', panel: '#10141f', elev: '#171d2e', border: '#242e47', accent: '#FF2A2A', sec: '#FF6A6A', furBase: '#C21818', furTip: '#ff9ec7' },
     { name: 'Matrix Cyber',   bg: '#030a05', panel: '#07140b', elev: '#0c2213', border: '#144522', accent: '#10b981', sec: '#34d399', furBase: '#064e3b', furTip: '#6ee7b7' },
     { name: 'Dracula Pro',    bg: '#0b0914', panel: '#151226', elev: '#1f1b38', border: '#342c5c', accent: '#ff79c6', sec: '#bd93f9', furBase: '#4c1d95', furTip: '#ff79c6' },
@@ -823,6 +824,7 @@ render();setTimeout(lay,300);
   ];
 
   var FUR_COAT_PRESETS = [
+    { name: 'MuZe Noir',    baseColor: '#1a0505', tipColor: '#FF2A2A', furLength: 0.31, furDensity: 0.82, curliness: 0.23 },
     { name: 'Sakura Mochi', baseColor: '#C21818', tipColor: '#ff9ec7', furLength: 0.31, furDensity: 0.78, curliness: 0.23 },
     { name: 'Cyber Neon',   baseColor: '#131638', tipColor: '#67e8f9', furLength: 0.30, furDensity: 0.90, curliness: 0.18 },
     { name: 'Golden Fluff', baseColor: '#7c3f14', tipColor: '#fde68a', furLength: 0.36, furDensity: 0.88, curliness: 0.52 },
@@ -1441,7 +1443,7 @@ render();setTimeout(lay,300);
       uClumping: { value: 0.38 },
       uCurliness: { value: 0.23 },
       uBaseColor: { value: new THREE.Color('#C21818') },
-      uTipColor: { value: new THREE.Color('#ff9ec7') },
+      uTipColor: { value: new THREE.Color('#FF2A2A') },
       uRoughness: { value: 0.75 },
       uSpecular: { value: 0.26 },
       uKeyLightDir: { value: new THREE.Vector3(0.6, 0.8, 0.7).normalize() },
@@ -2310,7 +2312,7 @@ render();setTimeout(lay,300);
     var ROLES = [
       { key: 'CODER', color: '#FF2A2A', lines: ['patching src/core/{n}.ts', 'running cargo test --quiet', 'refactoring fur_gen module', 'type-checking {n} files', 'lint pass: 2 warnings fixed', 'committing with a haiku message'] },
       { key: 'SCOUT', color: '#FF6A6A', lines: ['scanning horizon at {n}°', 'indexing context vectors', 'reading docs page {n}', 'mapping the dependency graph', 'listening for far signals…', 'marking 3 paths as safe'] },
-      { key: 'MUSE', color: '#ff9ec7', lines: ['humming in d minor', 'drafting verse {n}', 'tuning the reverb tail', 'arranging wind chimes', 'harmonizing with the chime engine', 'saving a melody fragment'] },
+      { key: 'MUSE', color: '#FF2A2A', lines: ['humming in d minor', 'drafting verse {n}', 'tuning the reverb tail', 'arranging wind chimes', 'harmonizing with the chime engine', 'saving a melody fragment'] },
       { key: 'OPS', color: '#34d399', lines: ['pruning local caches', 'syncing sqlite wal', 'reconciling ledger {n}', 'compacting memory.md', 'rotating ephemeral keys', 'checkpoint written to tasks.json'] },
       { key: 'SAGE', color: '#f59e0b', lines: ['reflecting on thread {n}', 'summarizing the blackboard', 'distilling one lesson', 'rereading the protocol', 'archiving a dead plan', 'lighting a small lantern'] }
     ];
