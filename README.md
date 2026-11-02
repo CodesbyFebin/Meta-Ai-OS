@@ -4,7 +4,12 @@
 
 <p align="center"><a href="https://codesbyfebin.github.io/Meta-Ai-OS/"><img src="docs/assets/talk-to-muse.svg" alt="Talk to MUSE: open the interactive pitch page" width="560"></a></p>
 
-> **Note:** GitHub READMEs can't run JavaScript, so MUSE can't talk inside this page. The button opens [`docs/index.html`](docs/index.html), a single-file pitch page where you can click MUSE or talk to it with your browser's Web Speech API. Its replies are **offline demo answers** from [`docs/muse-faq.json`](docs/muse-faq.json). The GitHub Pages link only works once Pages is enabled for this repo; until then, open the file locally.
+> **Note:** GitHub READMEs can't run JavaScript. The button opens [`docs/index.html`](docs/index.html): the **MUSE companion**, a single-file 3D voice companion made by the owner in Google AI Studio and recoloured to MuZe black and red. Its built-in replies are scripted. The optional "Brain" field uses an OpenAI-compatible key that the visitor types themselves, and it is stored only in their browser. The GitHub Pages link only works once the owner enables Pages (see `.github/workflows/pages.yml`, which only runs manually); until then, open the file locally.
+
+## For judges (3 minutes)
+- **Demo mode:** `/workspace/builder/demo` in the MuZe app walks through MUSE greets → brand workspace → WhatsApp lead (labelled FIXTURE unless a real webhook is configured) → agent draft (template) → pending commit with diff → you approve → `/api/dispatch` → evidence, feed and weekly report. Without WhatsApp credentials the send shows as *held, not sent*.
+- **Criteria map:** [docs/JUDGING.md](https://github.com/CodesbyFebin/MuzeBOS--The-Zero-Trust-Business-OS/blob/feat/win-polish/docs/JUDGING.md) in the main repo (PR #73).
+- **Not claimed:** no users, revenue or Meta partnership. Meta App Review has not been submitted. Pricing is proposed.
 
 ## The problem
 Meta's business tools are fragmented. Business Suite for Pages, Creator Studio for Instagram, WhatsApp Manager, Ads Manager, and separate inboxes for Messenger and Instagram DMs. A founder or agency running several brands ends up with about **12 tabs open**, and no single record of who (or which AI) did what.
