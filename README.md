@@ -1,109 +1,166 @@
-<p align="center"><img src="docs/assets/hero-banner.svg" alt="MuZe — Meta AI Business Operating Server, with the MUSE silhouette" width="100%"></p>
+# MuZe (MeTaBos): Open-Source, Self-Hosted AI Business OS with Approval-Gated Agents
 
-<h3 align="center">One Discord-style server for every Meta surface. Every agent action is a commit. Nothing ships until you approve it.</h3>
+**Self-hosted, open-source AI business OS: one approval-gated workspace for Meta inbox drafts, invoicing, inventory, CRM and local Llama agents.**
 
-<p align="center"><a href="https://codesbyfebin.github.io/Meta-Ai-OS/"><img src="docs/assets/talk-to-muse.svg" alt="Talk to MUSE: open the interactive pitch page" width="560"></a></p>
+[![License: MIT](https://img.shields.io/github/license/CodesbyFebin/Meta-Ai-OS)](LICENSE)
+[![CI](https://github.com/CodesbyFebin/Meta-Ai-OS/actions/workflows/ci.yml/badge.svg)](https://github.com/CodesbyFebin/Meta-Ai-OS/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/CodesbyFebin/Meta-Ai-OS/actions/workflows/codeql.yml/badge.svg)](https://github.com/CodesbyFebin/Meta-Ai-OS/actions/workflows/codeql.yml)
+[![Release](https://img.shields.io/github/v/release/CodesbyFebin/Meta-Ai-OS?include_prereleases)](https://github.com/CodesbyFebin/Meta-Ai-OS/releases)
 
-> **Note:** GitHub READMEs can't run JavaScript, so MUSE can't talk inside this page. The button opens [`docs/index.html`](docs/index.html), a single-file pitch page where you can click MUSE or talk to it with your browser's Web Speech API. Its replies are **offline demo answers** from [`docs/muse-faq.json`](docs/muse-faq.json). The GitHub Pages link only works once Pages is enabled for this repo; until then, open the file locally.
+<p align="center"><img src="docs/assets/hero-banner.svg" alt="MuZe — self-hosted AI business operating server with a Discord-style shell" width="100%"></p>
 
-## The problem
-Meta's business tools are fragmented. Business Suite for Pages, Creator Studio for Instagram, WhatsApp Manager, Ads Manager, and separate inboxes for Messenger and Instagram DMs. A founder or agency running several brands ends up with about **12 tabs open**, and no single record of who (or which AI) did what.
+MuZe is a **Next.js + SQLite** workspace for solo founders, creators and small agencies. AI agents only **propose**; every post, reply, ad draft or invoice is recorded as a commit and nothing is sent until a human approves the **exact payload**. It runs on your own machine, and by default it uses **free/local Llama models** (Ollama or in-browser WebLLM). The app is called **MeTaBos** in the code.
 
-## The solution
-**MuZe** (the app is called MeTaBos in the code) is one server:
+> **Status: single-operator preview, built for the Meta Global AI Developer Hackathon (Oct–Nov 2026).** Not production-ready. Meta channels (WhatsApp, Instagram, Messenger, Facebook, Threads, Ads) show **Not connected** until you add your own credentials. See [Feature status](#feature-status).
 
-- **Discord-style shell.** Brands are servers, Meta surfaces are channels, and your team and AI agents share the member list.
-- **Git for agents.** Every post, inbox reply and ad draft is recorded as a commit with an author, a diff and a status. A commit is only marked *shipped* after a human approved it and it was actually sent.
-- **Human approval gate.** **Jev** binds each approval to the hash of the exact payload. If the payload changes, the write is refused. There is no auto-send and no auto-approve path; only approved items reach `/api/dispatch`.
-- **MUSE, the voice agentic harness.** Push-to-talk assistant that reads your data and drafts work. It can't approve anything itself.
+## Table of contents
+- [Screenshots](#screenshots) · [Quickstart (≈60 s)](#quickstart-60-seconds) · [Features](#feature-status) · [Architecture](#architecture) · [AI models](#ai-models-free-first) · [Safety model](#safety-model) · [Comparison](#how-muze-compares) · [FAQ](#faq) · [Roadmap](#roadmap) · [Contributing](#contributing) · [Citation](#citation) · [License](#license)
 
-## Who it's for
-- **Businesses:** one unified inbox for WhatsApp, Messenger, Instagram and Facebook leads, ads kept as drafts, GST/ops tools.
-- **Creators:** one content studio and calendar for Facebook, Instagram and Threads, with a single approval queue.
+## Screenshots
+![Mission Control on a fresh install with no keys configured](docs/assets/mission-control-fresh-install.png)
+*Mission Control right after `npm run dev` on a fresh clone, no keys configured (captured 2 Nov 2026 in headless Chrome; MUSE falls back to 2D without a GPU).*
 
-## Demo
-[![MUSE in the Studio scene](docs/assets/muse-fur-studio.png)](docs/assets/muse-fur-studio.png)
+[![MUSE assistant in the Studio scene](docs/assets/muse-fur-studio.png)](docs/assets/muse-fur-studio.png)
 
 | Fur Lab | 2D fallback | Mobile |
 |---|---|---|
 | ![Fur Lab panel](docs/assets/muse-fur-lab.png) | ![2D MUSE fallback](docs/assets/muse-fur-2d-fallback.png) | ![Mobile layout](docs/assets/muse-fur-mobile.png) |
 
-Screenshots were taken in headless Chromium with software GL (no GPU). A demo GIF is still to be recorded; see [DEMO-SCRIPT.md](DEMO-SCRIPT.md).
+<!-- GIF slot: record the flow in DEMO-SCRIPT.md and save it as docs/assets/demo.gif, then replace this comment with ![MuZe demo](docs/assets/demo.gif) -->
+A demo GIF is **PENDING** (script: [DEMO-SCRIPT.md](DEMO-SCRIPT.md)). Screenshots were taken in headless Chromium with software GL.
+
+## Quickstart (≈60 seconds)
+Tested on 2 Nov 2026 on Linux with Node 20.19 and a warm npm cache: clone → `npm ci` → first page served in **42 s**. A cold npm cache will take longer.
+
+Requires **Node.js 22** (see `.node-version`; Node 20 works for the app but a few lab tests need Node 22) and git.
+```bash
+git clone https://github.com/CodesbyFebin/Meta-Ai-OS && cd Meta-Ai-OS
+npm ci            # installs dependencies (incl. native better-sqlite3)
+npm run dev       # opens http://localhost:4100
+```
+No API keys are needed to start: every provider shows **Not connected** until configured. Optional: `cp .env.example .env.local` and fill in only what you use ([docs/PROVIDER-ENV.md](docs/PROVIDER-ENV.md)). Never commit real keys.
+
+Checks: `npm run typecheck` · `npm test` · `npm run build`.
+
+## Feature status
+Labels: **AVAILABLE** works locally with tests · **NEEDS CREDENTIALS** local records work, live send needs your provider account · **DEMO** offline/sample data · **PLANNED/PENDING** not built yet. The authoritative per-page list is generated from code: [docs/FEATURE-STATUS-MATRIX.md](docs/FEATURE-STATUS-MATRIX.md) (195 available, 43 needs-credentials, 7 existing, out of 245 pages).
+
+| Feature | What it does | Status |
+|---|---|---|
+| Discord-style Meta Server shell | Brands as servers, Meta surfaces as channels, agents in the member list | AVAILABLE |
+| Git-for-agents commit log | Every agent post/reply/ad draft is a commit with author, diff and status | AVAILABLE |
+| Jev approval gate | Approval bound to a hash of the exact payload; changed payloads are refused | AVAILABLE (`tests/release-gate1-approval.test.ts`) |
+| Unified inbox (WhatsApp, Messenger, Instagram, FB leads) | Drafts and records locally | NEEDS CREDENTIALS for live send |
+| Social & ads drafts | Content calendar, ad drafts kept as drafts | NEEDS CREDENTIALS |
+| Invoicing, GST, inventory, CRM, POS, bookings | SQLite-backed business modules with approval-bound invoices | AVAILABLE (local; no tax filing claimed) |
+| UPI payment requests | Creates requests; settlement is manually reconciled and labelled | AVAILABLE (not a payment gateway) |
+| Local Llama tier (Ollama) + WebLLM in browser | Free classification, drafting and short replies | AVAILABLE when Ollama/WebGPU is present |
+| Llama Guard 3 (1B) check | Safety check before drafts reach Jev | AVAILABLE when the model is installed locally |
+| MUSE voice assistant | Push-to-talk, reads data and drafts; cannot approve | AVAILABLE (browser Web Speech) |
+| `docs/index.html` "Talk to MUSE" pitch page | Offline FAQ answers from `docs/muse-faq.json` | DEMO |
+| Brain / ask-your-data | Fixed parameterised read-only SELECTs, no LLM invention | AVAILABLE |
+| DPDP privacy export & redact | Export/pseudonymise customer data with evidence log | AVAILABLE |
+| Provider dispatch adapters (payment links, dunning, ACH…) | Live provider actions | PLANNED (items stay queued) |
+| Public docs site (GitHub Pages) | Static docs in `site/` | PENDING (not deployed) |
+| Demo GIF | Recorded walkthrough | PENDING |
 
 ## Architecture
 ```mermaid
 flowchart LR
   U[Owner / team] -->|voice, click| SH[Meta Server shell<br/>servers · channels · Agent Hub]
-  MUSE[MUSE voice harness] --> SH
+  MUSE[MUSE voice assistant] --> SH
   SH --> AG[Agents & Claw Swarm]
-  AG -->|plan / draft| MM[Meta Model API<br/>USD hard spend cap]
-  AG -->|classify, short replies| LL[Optional local Llama 3.2]
+  AG -->|classify, draft| LL[Free/local Llama 3.2<br/>Ollama or WebLLM]
+  AG -.->|optional, off by default| OR[OpenRouter / paid routes<br/>explicit opt-in + spend cap]
   AG --> LG[Llama Guard 3 check]
   LG --> C[Commit log<br/>git-for-agents]
   C --> JEV{Jev approval<br/>payload hash}
   JEV -->|approved, unchanged| D[/api/dispatch/]
   JEV -->|changed or rejected| X[Refused]
-  D --> META[Meta surfaces<br/>WhatsApp · IG · Messenger · FB · Threads · Ads]
+  D --> META[Meta surfaces<br/>needs your credentials]
   D --> DB[(SQLite workspace DB<br/>evidence log)]
 ```
+Deeper docs: [architecture & threat model](docs/METABOS-ARCHITECTURE.md), [API](docs/METABOS-API.md), [inference](docs/METABOS-INFERENCE.md), [docs index](docs/README.md).
 
-## Built with Llama
-MuZe uses the **Meta Model API** for planning and drafting (with a hard spend cap and a token saver), an **optional local Llama 3.2** tier for classification and short replies, and **Llama Guard 3 1B** as a safety check before anything reaches Jev. When a model is not reachable, the app shows *Not connected* rather than fake output.
+## AI models (free-first)
+| Route | Model | Cost | Default |
+|---|---|---|---|
+| Browser | Llama via [WebLLM](https://github.com/mlc-ai/web-llm) (WebGPU) | Free | Available when WebGPU is present |
+| Local | `llama3.2:3b` via [Ollama](https://ollama.com) (`MUZEBOS_OLLAMA_URL`) | Free | Off until configured |
+| Local safety | Llama Guard 3 1B | Free | Off until installed |
+| OpenRouter | Any model you set in `MUZEBOS_OPENROUTER_MODEL` (free Llama variants available) | Free or paid, your choice | Off until configured |
+| Paid hosted routes | Meta Model API / Baseten | Paid | **Off.** Need a key **and** `MUZEBOS_INFERENCE_PAID=1`, with per-workspace spend caps |
 
-**Built with Llama.** Llama models are subject to the Llama Community License.
-
-## Quick start
-```bash
-git clone https://github.com/CodesbyFebin/Meta-Ai-OS && cd Meta-Ai-OS
-npm ci                      # Node 20+
-cp .env.example .env.local  # optional; every provider stays "Not connected" without keys
-npm run dev                 # http://localhost:3000
-npm test                    # vitest
-npm run build
-```
-Provider variables are documented in [docs/PROVIDER-ENV.md](docs/PROVIDER-ENV.md). Never commit real keys.
-
-## Verification
-### This repo (re-run after re-sequencing)
-Run on 2 Nov 2026, about 4:30–4:50 AM IST, on the box (Node 20.19.2, Linux, no GPU), after `npm ci`. Local checks only.
-
-| Check | Result |
-|---|---|
-| `npx tsc --noEmit` | pass (exit 0) |
-| `npm run build` | pass (exit 0); one warning from `@miosa/sdk` ("Critical dependency: the request of a dependency is an expression") |
-| `npx vitest run` | 5405 passed, 9 skipped, 4 failed (5418 tests, 424 files). The full run overlapped with a second accidental run on the same machine; re-running the 5 failing files alone left **2 failed tests + 1 file that fails to load**, all in the lab area and the same ones the development repo already lists as failing: `globSync is not a function` on Node 20 (`lab-v2-g*`) and a 30 s timeout in `lab-ledger-retention`. `lab-view` and `legacy-lab` passed alone. |
-| Secret scan (gitleaks 8.21.2, all commits) | 7 findings, all reviewed as non-secrets: placeholder values in test files (`xoxb-very-secret-9876`, `apify_api_TESTSECRET123`, `zk_live_abc123`, a dummy UUID) and an empty `.env.example` key. `rg` for `ghp_`, `sk-`, `EAA…`, `LLM_…=`, `AKIA` and private-key headers: no real keys. |
-| Route crawl, e2e, a11y | not re-run in this repo; see the development results below |
-
-
-### Development repo (quoted from [docs/VERIFICATION-REPORT.md](docs/VERIFICATION-REPORT.md), local checks only, 2 Nov 2026 IST)
-> | `npx vitest run` (full) | 5376 passed, 9 skipped. 2 tests failed and 1 file failed to load, all in the lab area, which was already failing before this work |
-> | Route crawl | 244/244 routes return 200 with 0 stubs on desktop and on mobile |
-> | Local swarm e2e | pass. "Run on local swarm" ran the claw-local Llama-3.2-3B in 18–36 s at $0. Llama Guard returned `safe`, a Brain draft was saved, and Jev showed `awaiting_approval`. Nothing was sent. |
-> | External sends | BLOCKED by design. Only approved Jev items reach `/api/dispatch`; the Meta credentials are not live here |
-> | MUSE fur | Not measured: real-GPU fps. |
-
-The report states it "is not a production-readiness claim". Meta Suite channels without real credentials (Facebook, Threads, Messenger, Ads) show **Not connected**; no live Meta account is wired in this repo.
+When a model is not reachable the app shows *Not connected* instead of fake output. Llama models are subject to the Llama Community License.
 
 ## Safety model
-1. Agents only **propose**. Drafts pass Llama Guard 3, then wait in Jev.
-2. Jev approves the canonical hash of the exact payload; tampering after approval is refused (covered by `tests/release-gate1-approval.test.ts`).
+1. Agents only **propose**. Drafts pass Llama Guard 3 (when installed), then wait in Jev.
+2. Jev approves the canonical hash of the exact payload; tampering after approval is refused.
 3. Only approved, unchanged items reach `/api/dispatch`, and only to a connected sender.
 4. MUSE can read and draft; voice approval is refused by design.
-5. Spend is capped per workspace and per agent. See [SECURITY.md](SECURITY.md).
+5. Spend is capped per workspace and per agent. Local audit hashes are not external attestations. See [SECURITY.md](SECURITY.md).
 
-## Pre-existing code disclosure
-The Meta Global AI Developer Hackathon kicked off on **26 Oct 2026, 9:30 PM IST**. The first commit here, `chore: import pre-existing code (pre-kickoff, Oct 26 2026)`, is the development repo as of commit `1105e64` (26 Oct 2026, 7:35 PM IST), the last commit before kickoff. It includes a FounderOS fork (MIT) and earlier MuzeBOS work. Everything after it was built during the event. Details and ambiguities: [HACKATHON.md](HACKATHON.md).
+## How MuZe compares
+Honest positioning, not a benchmark. Check each product's own docs for current features.
 
-**History note:** this repo's history was **re-sequenced** from the development repo [CodesbyFebin/MuzeBOS--The-Zero-Trust-Business-OS](https://github.com/CodesbyFebin/MuzeBOS--The-Zero-Trust-Business-OS) (draft PRs #50–#68) into readable commits grouped by area. Commit dates are when this repo was assembled, not backdated. The original granular history stays in the development repo.
+| | MuZe (this repo) | Meta Business Suite | Generic agent frameworks (e.g. LangChain apps) | Hosted helpdesk / CRM SaaS |
+|---|---|---|---|---|
+| Self-hosted, your data in local SQLite | Yes | No | Depends on you | No |
+| Human approval bound to exact payload | Built in | No | You build it | Varies |
+| Every AI action logged as a commit | Yes | No | You build it | Varies |
+| Free/local Llama by default | Yes | n/a | Depends | Rarely |
+| Live Meta sending out of the box | **No** (needs your credentials) | Yes | No | Varies |
+| Maturity | Preview | Production | Varies | Production |
+
+## FAQ
+**What is MuZe / MeTaBos?**
+An open-source, self-hosted AI business operating system: a Discord-style workspace where AI agents draft social posts, inbox replies, ads and invoices, and a human approves each exact payload before anything is sent.
+
+**Is it free?** Yes, MIT-licensed. The default AI path uses free local models (Ollama, WebLLM). Paid routes are off unless you opt in.
+
+**Does it send WhatsApp or Instagram messages automatically?** No. There is no auto-send or auto-approve path. Live sending also needs your own Meta app credentials; without them channels show *Not connected*.
+
+**Which AI models does it use?** Llama 3.2 3B locally via Ollama, Llama in the browser via WebLLM, Llama Guard 3 1B for safety checks, and optionally any OpenRouter model you configure.
+
+**Can I run it without a GPU or API keys?** Yes. The app, database and business modules run on plain Node.js. AI features show *Not connected* until a model is available.
+
+**Where is my data stored?** In a local SQLite database on your machine. Cloud model providers, if you enable them, have their own retention rules.
+
+**Is it production-ready?** No. It is a single-operator preview with no security certification. See [docs/RELEASE-READINESS.md](docs/RELEASE-READINESS.md).
+
+**Is it affiliated with Meta?** No. Meta, Facebook, Instagram, Messenger, WhatsApp, Threads and Llama are trademarks of Meta.
+
+## Roadmap
+- [x] Jev payload-bound approvals, commit log, SQLite business modules (AVAILABLE)
+- [x] Optional local Llama tier and Llama Guard check (AVAILABLE)
+- [ ] Green CI on every push (in progress in this PR)
+- [ ] Demo GIF and deployed docs site (PENDING)
+- [ ] Meta webhook ingestion and live sends behind Jev with real credentials (PLANNED)
+- [ ] Provider dispatch adapters for the 43 needs-credentials pages (PLANNED)
+- [ ] Multi-user accounts and hosted deployment guide (PLANNED)
+
+Track work in [Issues](https://github.com/CodesbyFebin/Meta-Ai-OS/issues) (look for `good first issue`).
+
+## Contributing
+Contributions are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) and the [Code of Conduct](CODE_OF_CONDUCT.md), and report vulnerabilities privately per [SECURITY.md](SECURITY.md). Questions and ideas go to [Discussions](https://github.com/CodesbyFebin/Meta-Ai-OS/discussions).
+
+## Hackathon disclosure
+The first commit imports pre-existing code from before the 26 Oct 2026 kickoff (including a FounderOS fork, MIT). This repo's history was re-sequenced from [CodesbyFebin/MuzeBOS--The-Zero-Trust-Business-OS](https://github.com/CodesbyFebin/MuzeBOS--The-Zero-Trust-Business-OS); commit dates are assembly time, not backdated. Details: [HACKATHON.md](HACKATHON.md). Earlier verification results: [docs/VERIFICATION-REPORT.md](docs/VERIFICATION-REPORT.md). Previous README: [docs/METABOS-README.md](docs/METABOS-README.md).
 
 ## Third-party credits
-See [THIRD_PARTY.md](THIRD_PARTY.md) and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md): FounderOS (MIT), agentshield, ai-employees, founder-skill, ai-agent-onboarding (licences in `vendor/`), three.js (MIT). Meta, Facebook, Instagram, Messenger, WhatsApp, Threads and Llama are trademarks of Meta; this project is not affiliated with or endorsed by Meta.
+See [THIRD_PARTY.md](THIRD_PARTY.md) and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md): FounderOS (MIT), agentshield, ai-employees, founder-skill, ai-agent-onboarding (licences in `vendor/`), three.js (MIT). Not affiliated with or endorsed by Meta.
 
-## Team
-**Febin Francis** ([@CodesbyFebin](https://github.com/CodesbyFebin)), Kochi, Kerala, India. Solo, indie track.
+## Citation
+If you reference MuZe in research or writing, use [CITATION.cff](CITATION.cff) (GitHub shows a "Cite this repository" button):
+```bibtex
+@software{francis_muze_2026,
+  author = {Francis, Febin},
+  title  = {MuZe (MeTaBos): Self-Hosted AI Business OS with Approval-Gated Agents},
+  year   = {2026},
+  url    = {https://github.com/CodesbyFebin/Meta-Ai-OS},
+  license = {MIT}
+}
+```
 
-## Licence
-[MIT](LICENSE), matching the development repo.
-
-<sub>The previous MeTaBos README is kept at [docs/METABOS-README.md](docs/METABOS-README.md).</sub>
+## License
+[MIT](LICENSE). Includes code from FounderOS (MIT); see [THIRD_PARTY.md](THIRD_PARTY.md). Maintained by Febin Francis ([@CodesbyFebin](https://github.com/CodesbyFebin)), Kochi, Kerala, India.

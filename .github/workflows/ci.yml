@@ -2,18 +2,31 @@ name: CI
 
 on:
   push:
+    branches: [main]
   pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version-file: .node-version
           cache: npm
       - run: npm ci
-      - run: npm run typecheck
-      - run: npm test -- --maxWorkers=4 --minWorkers=1
-      - run: npm run build
+      - name: Typecheck (lint)
+        run: npm run typecheck
+      - name: Test
+        run: npm test -- --maxWorkers=4
+      - name: Build
+        run: npm run build

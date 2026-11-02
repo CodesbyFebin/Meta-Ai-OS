@@ -8,7 +8,7 @@ Coding agents must also read AGENTS.md and CLAUDE.md.
 
 ## Local development
 
-Use Node 22, `npm ci`, then `npm run dev` on localhost:4100. Keep real data in
+Use Node 22, `npm ci`, then `npm run dev` on http://localhost:4100. Keep real data in
 ignored directories and use separate disposable DBs for qualification. Never
 commit secrets, credentials, customer data, provider payloads or filled env files.
 Preserve MIT/upstream notices and verify the licence of any imported code.
@@ -23,7 +23,7 @@ Do not add invented ratings, customers, certifications or production-readiness s
 
 ```sh
 npm run typecheck
-npm test -- --maxWorkers=4 --minWorkers=1
+npm test -- --maxWorkers=4
 npm run build
 npm run docs:build
 ```
@@ -47,3 +47,18 @@ distinct user tasks, not keyword variants. See [search policy](docs/SEARCH-OPTIM
 Open an issue with a minimal sanitized reproduction, source revision, Node/browser
 version, expected result, actual result and relevant redacted logs. Report security
 vulnerabilities privately using [SECURITY.md](SECURITY.md), not public exploit details.
+
+## Good first issues
+
+Look for issues labelled
+[`good first issue`](https://github.com/CodesbyFebin/Meta-Ai-OS/labels/good%20first%20issue) or
+[`help wanted`](https://github.com/CodesbyFebin/Meta-Ai-OS/labels/help%20wanted).
+Comment on the issue before starting so work isn't duplicated. Use
+[Discussions](https://github.com/CodesbyFebin/Meta-Ai-OS/discussions) for questions.
+
+## Honest labels
+
+Mark anything that uses sample data as **DEMO** and anything not built as
+**PLANNED** or **PENDING**. Do not add fabricated stats, stars, users, benchmarks
+or badges. Use real model names (for example `llama3.2:3b` via Ollama); paid model
+routes must stay opt-in. All participants follow the [Code of Conduct](CODE_OF_CONDUCT.md).

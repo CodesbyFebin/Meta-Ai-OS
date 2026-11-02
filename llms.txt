@@ -1,0 +1,29 @@
+# MuZe (MeTaBos)
+
+> Open-source (MIT), self-hosted AI business operating system built with Next.js and SQLite. AI agents draft Meta inbox replies, social posts, ad drafts and invoices; every action is logged as a commit, and nothing is sent until a human approves the exact payload (the "Jev" gate). Default AI path is free/local Llama (Ollama llama3.2:3b, WebLLM in the browser, Llama Guard 3 1B). Single-operator preview, not production-ready; Meta channels need the user's own credentials and otherwise show "Not connected". Not affiliated with Meta.
+
+## Start here
+- [README](https://github.com/CodesbyFebin/Meta-Ai-OS/blob/main/README.md): value proposition, quickstart (npm ci && npm run dev on port 4100), feature status, FAQ
+- [Feature status matrix](https://github.com/CodesbyFebin/Meta-Ai-OS/blob/main/docs/FEATURE-STATUS-MATRIX.md): per-page status generated from code (available / needs-credentials / planned)
+- [Docs index](https://github.com/CodesbyFebin/Meta-Ai-OS/blob/main/docs/README.md): map of all documentation
+
+## Architecture and safety
+- [Architecture and threat model](https://github.com/CodesbyFebin/Meta-Ai-OS/blob/main/docs/METABOS-ARCHITECTURE.md)
+- [Security policy](https://github.com/CodesbyFebin/Meta-Ai-OS/blob/main/SECURITY.md)
+- [Security and data boundaries](https://github.com/CodesbyFebin/Meta-Ai-OS/blob/main/docs/search/security-and-data.md)
+- [Invoice approvals](https://github.com/CodesbyFebin/Meta-Ai-OS/blob/main/docs/search/invoice-approvals.md)
+
+## AI inference
+- [Inference routing](https://github.com/CodesbyFebin/Meta-Ai-OS/blob/main/docs/METABOS-INFERENCE.md): browser WebLLM, Ollama, OpenRouter; paid routes off unless MUZEBOS_INFERENCE_PAID=1
+- [WebLLM inference](https://github.com/CodesbyFebin/Meta-Ai-OS/blob/main/docs/search/webllm-inference.md)
+- [Provider environment variables](https://github.com/CodesbyFebin/Meta-Ai-OS/blob/main/docs/PROVIDER-ENV.md)
+
+## Operations
+- [Self-hosting](https://github.com/CodesbyFebin/Meta-Ai-OS/blob/main/docs/search/self-hosting.md)
+- [API reference](https://github.com/CodesbyFebin/Meta-Ai-OS/blob/main/docs/METABOS-API.md)
+- [Verification report](https://github.com/CodesbyFebin/Meta-Ai-OS/blob/main/docs/VERIFICATION-REPORT.md): local test results and stated limits
+
+## Optional
+- [Hackathon disclosure](https://github.com/CodesbyFebin/Meta-Ai-OS/blob/main/HACKATHON.md)
+- [Contributing](https://github.com/CodesbyFebin/Meta-Ai-OS/blob/main/CONTRIBUTING.md)
+- [Changelog](https://github.com/CodesbyFebin/Meta-Ai-OS/blob/main/CHANGELOG.md)

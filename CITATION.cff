@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using these metadata."
+title: "MuZe (MeTaBos): Self-Hosted AI Business OS with Approval-Gated Agents"
+type: software
+authors:
+  - family-names: Francis
+    given-names: Febin
+    alias: CodesbyFebin
+repository-code: "https://github.com/CodesbyFebin/Meta-Ai-OS"
+abstract: >-
+  Open-source, self-hosted Next.js and SQLite business workspace where AI agents
+  draft Meta inbox replies, social posts, ads and invoices, and a human approves
+  the exact payload before anything is sent. Free/local Llama models by default.
+keywords: [self-hosted, ai-agents, human-in-the-loop, business-os, llama, nextjs, sqlite]
+license: MIT
+version: 0.1.0
+date-released: "2026-11-02"

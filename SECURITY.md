@@ -7,7 +7,7 @@ and [the threat model](docs/METABOS-ARCHITECTURE.md) before deployment.
 ## Report a vulnerability
 
 Use the repository's private vulnerability reporting feature if enabled:
-https://github.com/CodesbyFebin/MuzeBOS--The-Zero-Trust-Business-OS/security/advisories/new.
+https://github.com/CodesbyFebin/Meta-Ai-OS/security/advisories/new.
 If that feature is unavailable, contact CodesbyFebin through the contact details
 on https://codesbyfebin.github.io/ to arrange a private channel. Do not post
 credentials, personal records or a working exploit publicly. No guaranteed
@@ -24,3 +24,7 @@ protect environment files and qualify backups/recovery. `noindex` is not access
 control. Local audit hashes are not external attestations or zk proofs. Cloud
 inference and integrations have provider-specific retention and permission rules.
 Current dependency review and independent assessment remain release gates.
+
+## Supported versions
+
+Only the latest commit on `main` and the most recent release receive fixes during the preview.
