@@ -1,10 +1,18 @@
+# MuZeBOS — Meta AI Zero Trust Business Open Server
+
 <p align="center"><img src="docs/assets/hero-banner.svg" alt="MuZe — Meta AI Business Operating Server, with the MUSE silhouette" width="100%"></p>
 
 <h3 align="center">One Discord-style server for every Meta surface. Every agent action is a commit. Nothing ships until you approve it.</h3>
 
 <p align="center"><a href="https://codesbyfebin.github.io/Meta-Ai-OS/"><img src="docs/assets/talk-to-muse.svg" alt="Talk to MUSE: open the interactive pitch page" width="560"></a></p>
 
-> **Note:** GitHub READMEs can't run JavaScript, so MUSE can't talk inside this page. The button opens [`docs/index.html`](docs/index.html), a single-file pitch page where you can click MUSE or talk to it with your browser's Web Speech API. Its replies are **offline demo answers** from [`docs/muse-faq.json`](docs/muse-faq.json). The GitHub Pages link only works once Pages is enabled for this repo; until then, open the file locally.
+> **Note:** GitHub READMEs can't run JavaScript. The button opens [`docs/index.html`](docs/index.html): the **MUSE companion**, a single-file 3D voice companion made by the owner in Google AI Studio and recoloured to MuZe black and red. Its built-in replies are scripted. The optional "Brain" field uses an OpenAI-compatible key that the visitor types themselves, and it is stored only in their browser. The GitHub Pages link only works once the owner enables Pages (see `.github/workflows/pages.yml`, which only runs manually); until then, open the file locally.
+
+## For judges (3 minutes)
+- **Demo mode** (*in the [development repo](https://github.com/CodesbyFebin/MuzeBOS--The-Zero-Trust-Business-OS); not in this repo*): `/workspace/builder/demo` walks through MUSE greets → brand workspace → WhatsApp lead (labelled FIXTURE unless a real webhook is configured) → agent draft (template) → pending commit with diff → you approve → `/api/dispatch` → evidence, feed and weekly report. Without WhatsApp credentials the send shows as *held, not sent*.
+- **Criteria map:** [docs/JUDGING.md](https://github.com/CodesbyFebin/MuzeBOS--The-Zero-Trust-Business-OS/blob/feat/win-polish/docs/JUDGING.md) in the main repo (PR #73).
+- **Demo script:** [DEMO-SCRIPT.md](DEMO-SCRIPT.md).
+- **Not claimed:** no users, revenue or Meta partnership. Meta App Review has not been submitted. Pricing is proposed.
 
 ## The problem
 Meta's business tools are fragmented. Business Suite for Pages, Creator Studio for Instagram, WhatsApp Manager, Ads Manager, and separate inboxes for Messenger and Instagram DMs. A founder or agency running several brands ends up with about **12 tabs open**, and no single record of who (or which AI) did what.
@@ -14,12 +22,26 @@ Meta's business tools are fragmented. Business Suite for Pages, Creator Studio f
 
 - **Discord-style shell.** Brands are servers, Meta surfaces are channels, and your team and AI agents share the member list.
 - **Git for agents.** Every post, inbox reply and ad draft is recorded as a commit with an author, a diff and a status. A commit is only marked *shipped* after a human approved it and it was actually sent.
-- **Human approval gate.** **Jev** binds each approval to the hash of the exact payload. If the payload changes, the write is refused. There is no auto-send and no auto-approve path; only approved items reach `/api/dispatch`.
+- **No unapproved execution.** **Jev** binds each approval to the hash of the exact payload. If the payload changes, the write is refused. There is no auto-send and no auto-approve path; only approved items reach `/api/dispatch`.
 - **MUSE, the voice agentic harness.** Push-to-talk assistant that reads your data and drafts work. It can't approve anything itself.
 
 ## Who it's for
 - **Businesses:** one unified inbox for WhatsApp, Messenger, Instagram and Facebook leads, ads kept as drafts, GST/ops tools.
 - **Creators:** one content studio and calendar for Facebook, Instagram and Threads, with a single approval queue.
+
+## What is in this repo (checked against the files)
+- **AgentVerse** (`/workspace/builder/agentverse`, `lib/metabos/agentverse/core.ts`): workspaces, a unified inbox with approve-to-reply, an ads draft wizard, ROAS from recorded usage, rules, a commit log with blame and git-style operations, search, and a live activity feed built from records.
+- **Meta Server, Agent Hub and Claw swarms** (`/workspace/builder/meta-server`, `agent-hub`, `swarms`).
+- **Dispatch** (`/api/dispatch`, `lib/metabos/dispatch`): WhatsApp Cloud and Instagram DM on Graph API v25, plus email, payment-link and model-completion channels. A send only runs after a Jev approval of the exact payload and with an idempotency key. If a channel's tokens are missing, the send is refused.
+- **Webhooks:** the Meta subscription handshake at `/api/webhooks/{whatsapp,instagram,messenger}`, plus a ManyChat webhook.
+- **Inference routing:** WebLLM, optional Ollama, the Meta model API (`muse-spark-1.3`, `muse-wonder-1.0`), Baseten Muse Spark Open and OpenRouter. **No model is configured by default**, and without one the app shows *Not connected*.
+
+### Only in the development repo (not in this repo)
+These were built later in [MuzeBOS PRs #70–#76](https://github.com/CodesbyFebin/MuzeBOS--The-Zero-Trust-Business-OS/pulls) and have **not** been brought into Meta-Ai-OS:
+- **Meta DRY_RUN:** on by default there, but this repo has none.
+- **Messenger and Page publish dispatch**, Messenger webhook messages going into the inbox, token health and asset discovery.
+- The **17-product Meta status monitor** with circuit breaker, **server presets**, AgentVerse V3, and Demo mode.
+- The **Business Open Server**: Agent Office, MUSE Sanctum, two-reviewer Jev, Operator console, Discord channels, MCP directory, Trust R0–R6 and the verification pipeline.
 
 ## Demo
 [![MUSE in the Studio scene](docs/assets/muse-fur-studio.png)](docs/assets/muse-fur-studio.png)
@@ -85,8 +107,49 @@ Run on 2 Nov 2026, about 4:30–4:50 AM IST, on the box (Node 20.19.2, Linux, no
 
 The report states it "is not a production-readiness claim". Meta Suite channels without real credentials (Facebook, Threads, Messenger, Ads) show **Not connected**; no live Meta account is wired in this repo.
 
+## Honest status
+- **Model:** none is configured by default. You need a local tier or a provider key.
+- **Live Meta sends:** this repo has **no DRY_RUN switch**. If you set real WhatsApp or Instagram tokens, an *approved* dispatch calls Graph API v25 for real. Use a Meta **test app** and test numbers only. Live sends have not been verified here.
+- **Leads:** reading leadgen data needs Meta App Review, which has not been submitted.
+- **Business model and go-to-market** are proposals. There are no users, revenue or traction, and no relationship with Meta.
+
+## Business model (proposed)
+Nothing here has been sold; there are no customers or revenue. Prices are **proposed** and untested.
+
+| Tier | For | What runs where |
+|---|---|---|
+| Cloud SaaS (proposed) | Solo founders, creators, D2C SMBs | Hosted MuZe, WhatsApp/Instagram via the owner's own Meta app |
+| Hybrid (proposed) | Teams of 50–500 | Models hosted; records, PII and evidence in the customer's VPC |
+| Sovereign on-prem + edge (proposed) | Regulated buyers | Self-hosted (runs on one machine with SQLite), local Llama, no outbound model calls |
+
+**Proposed pricing:** Free ₹0 (1 agent, Meta channels), SMB ₹4,999/mo, Growth ₹24,999/mo, Enterprise custom.
+
+**Open-source service lines for India (proposed):**
+- Support and AMC contracts
+- OSS licence and compliance audits (SBOM)
+- Migration and integration
+- Managed OSS hosting
+- Security and vulnerability management
+- OSPO setup
+- An OSS-to-agent bridge for open ERP/CRM
+- Training in Indian languages
+- An India OSS marketplace
+
+## Go-to-market (India SMBs and creators on WhatsApp) — plan, not results
+1. **Wedge:** a single workflow. A WhatsApp lead arrives, MUSE drafts the reply, and the owner approves it from their phone. The end-to-end Demo mode for this is in the development repo.
+2. **First users:** the owner's own brands first (workspaces are created by hand; none are seeded), then Kochi small businesses reached in person.
+3. **Channel:** Click-to-WhatsApp ads drafted in the ads wizard. Writing them to Meta needs App Review for `ads_management`.
+4. **Trust as the pitch:** every send is approved and recorded in the evidence log.
+5. **Milestones to prove:** a live Meta test app with one real inbound message, ten consenting businesses, and reply time measured before and after. None of these is done yet.
+
+## Known gaps
+- 2 failing lab tests and 1 lab test file that fails to load (see Verification), already failing before this work.
+- No DRY_RUN guard. Messenger/Page dispatch and the status monitor exist only in the development repo.
+- No live Meta account is wired in, and App Review has not been submitted.
+- The Pages link only works after the owner enables Pages, which has not been done.
+
 ## Safety model
-1. Agents only **propose**. Drafts pass Llama Guard 3, then wait in Jev.
+1. **No unapproved execution.** Agents only **propose**. Drafts pass Llama Guard 3, then wait in Jev.
 2. Jev approves the canonical hash of the exact payload; tampering after approval is refused (covered by `tests/release-gate1-approval.test.ts`).
 3. Only approved, unchanged items reach `/api/dispatch`, and only to a connected sender.
 4. MUSE can read and draft; voice approval is refused by design.
@@ -104,6 +167,6 @@ See [THIRD_PARTY.md](THIRD_PARTY.md) and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NO
 **Febin Francis** ([@CodesbyFebin](https://github.com/CodesbyFebin)), Kochi, Kerala, India. Solo, indie track.
 
 ## Licence
-[MIT](LICENSE), matching the development repo.
+**MIT License**, Copyright (c) 2026 FounderOS, as stated in [LICENSE](LICENSE). Changes in this repo are released under the same licence. Third-party components keep their own licences (see `vendor/` and THIRD_PARTY_NOTICES.md).
 
 <sub>The previous MeTaBos README is kept at [docs/METABOS-README.md](docs/METABOS-README.md).</sub>
