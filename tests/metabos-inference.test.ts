@@ -19,6 +19,7 @@ describe('Routing and Jev boundaries', () => {
     expect(chooseRoute('analysis', 'short', 'auto', routes({})).route.provider).toBe('ollama');
     expect(chooseRoute('plan', 'short', 'auto', routes({})).route.model).toBe('muse-spark-1.3-contributor');
     expect(routes({}).find(r => r.provider === 'muse-code')?.configured).toBe(false);
+    expect(routes({}).find(r => r.provider === 'muse-code')?.model).toBe('muse-code (not available)');
     expect(routes({}).find(r => r.provider === 'openclaw')?.configured).toBe(false);
   });
   it('requires both paid server opt-in and per-task consent, and never silently falls back', () => {
